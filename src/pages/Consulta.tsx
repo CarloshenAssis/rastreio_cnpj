@@ -304,9 +304,9 @@ function UploadTab({ onConsultar, busy }: { onConsultar: (c: string[]) => void; 
       )}>
         <Upload className="h-6 w-6 text-muted-foreground mb-2" />
         <div className="font-mono text-xs text-muted-foreground mb-1">
-          {fileName || "Arraste um arquivo .xlsx ou .csv aqui ou clique para selecionar"}
+          {fileName || "Arraste um arquivo .xlsx, .xls ou .csv aqui ou clique para selecionar"}
         </div>
-        <input type="file" accept=".xlsx,.csv" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
+        <input type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])} />
       </label>
 
       {rows && (
