@@ -215,30 +215,34 @@ export async function gerarRelatorioIndividual(
   doc.setFillColor(...LIGHT_BG);
   doc.setDrawColor(...BORDER);
   doc.setLineWidth(0.3);
-  doc.roundedRect(margin, y, contentW, 10, 2, 2, "FD");
-  doc.setFont("courier", "bold");
-  doc.setFontSize(14);
-  doc.setTextColor(...ACCENT);
-  doc.text(formatCNPJ(cnpj), margin + 4, y + 7);
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(8);
-  doc.setTextColor(...MUTED);
-  doc.text("CNPJ", pageW - margin - 4, y + 4, { align: "right" });
+  doc.roundedRect(margin, y, contentW, 12, 2, 2, "FD");
 
-  // Status badge
+  // CNPJ label pequeno acima
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(6);
+  doc.setTextColor(...MUTED);
+  doc.text("CNPJ", margin + 4, y + 4);
+
+  // Número do CNPJ
+  doc.setFont("courier", "bold");
+  doc.setFontSize(13);
+  doc.setTextColor(...ACCENT);
+  doc.text(formatCNPJ(cnpj), margin + 4, y + 10);
+
+  // Status badge — lado direito, centralizado verticalmente no box
   const statusColor = situacao.toUpperCase().includes("ATIVA")
     ? ([34, 197, 94] as [number, number, number])
     : situacao.toUpperCase().includes("BAIXADA")
     ? ([100, 116, 139] as [number, number, number])
     : ([245, 158, 11] as [number, number, number]);
   doc.setFillColor(...statusColor);
-  doc.roundedRect(pageW - margin - 30, y + 4, 28, 5, 1, 1, "F");
+  doc.roundedRect(pageW - margin - 30, y + 3.5, 28, 5.5, 1.5, 1.5, "F");
   doc.setFont("helvetica", "bold");
   doc.setFontSize(7);
   doc.setTextColor(...WHITE);
   doc.text(situacao.toUpperCase().slice(0, 14), pageW - margin - 16, y + 7.5, { align: "center" });
 
-  y += 14;
+  y += 16;
 
   // Campos em 2 colunas
   const col1 = margin;
