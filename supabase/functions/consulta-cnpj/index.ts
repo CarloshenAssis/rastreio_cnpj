@@ -171,18 +171,6 @@ Deno.serve(async (req) => {
     }
     const userId = userResp.user.id;
 
-    // Rate limiting: máx 500 consultas por hora por usuário
-    const { data: rateOk } = await admin.rpc("check_rate_limit", {
-      p_action: "consulta_cnpj",
-      p_limit: 500,
-      p_window_minutes: 60,
-    });
-    if (rateOk === false) {
-      return new Response(JSON.stringify({ error: "rate_limit_exceeded", message: "Limite de 100 consultas por hora atingido." }), {
-        status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-
     const body = await req.json().catch(() => ({}));
     const cnpjs: string[] = Array.isArray(body.cnpjs) ? body.cnpjs : [];
     const force: boolean = !!body.force;
