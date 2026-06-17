@@ -36,11 +36,17 @@ export default function Login() {
       email, password,
       options: { emailRedirectTo: `${window.location.origin}/dashboard` },
     });
+    if (error) { setLoading(false); setError(error.message); return; }
+    if (data.session) {
+      nav("/dashboard", { replace: true });
+      return;
+    }
+    // sem sessão imediata = confirmação de email pendente, tenta login direto
+    const { error: loginErr } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-    if (error) { setError(error.message); return; }
-    if (data.user && !data.session) {
-      toast.success("Conta criada. Verifique seu email para confirmar.");
-    } else if (data.session) {
+    if (loginErr) {
+      toast.success("Conta criada! Verifique seu email para confirmar e depois faça login.");
+    } else {
       nav("/dashboard", { replace: true });
     }
   };
