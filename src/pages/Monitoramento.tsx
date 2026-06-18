@@ -168,11 +168,23 @@ export default function Monitoramento() {
 
   const toggleTag = async (companyId: string, tagId: string, hasTag: boolean) => {
     if (hasTag) {
-      await supabase.from("company_tags").delete().eq("company_id", companyId).eq("tag_id", tagId);
+      const { error } = await supabase.from("company_tags").delete().eq("company_id", companyId).eq("tag_id", tagId);
+      if (error) { toast.error(error.message); return; }
+      setRows((prev) => prev.map((r) => r.id === companyId
+        ? { ...r, tags: r.tags?.filter((t) => t.id !== tagId) || [] }
+        : r
+      ));
     } else {
-      await supabase.from("company_tags").insert({ company_id: companyId, tag_id: tagId } as any);
+      const { error } = await supabase.from("company_tags").insert({ company_id: companyId, tag_id: tagId } as any);
+      if (error) { toast.error(error.message); return; }
+      const tag = tags.find((t) => t.id === tagId);
+      if (tag) {
+        setRows((prev) => prev.map((r) => r.id === companyId
+          ? { ...r, tags: [...(r.tags || []), tag] }
+          : r
+        ));
+      }
     }
-    await load();
   };
 
   const setFrequency = async (companyId: string, frequency: string) => {
