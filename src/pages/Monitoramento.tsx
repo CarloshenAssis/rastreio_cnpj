@@ -52,6 +52,7 @@ export default function Monitoramento() {
   const [regimeFilter, setRegimeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [showFavOnly, setShowFavOnly] = useState(false);
+  const [tagFilter, setTagFilter] = useState<string>("");
   const [rechecking, setRechecking] = useState(false);
   const [newTagName, setNewTagName] = useState("");
   const [showTagInput, setShowTagInput] = useState(false);
@@ -106,6 +107,7 @@ export default function Monitoramento() {
     }
     if (regimeFilter && r.regime_tributario !== regimeFilter) return false;
     if (statusFilter && r.status_cadastral !== statusFilter) return false;
+    if (tagFilter && !r.tags?.some((t) => t.id === tagFilter)) return false;
     return true;
   });
 
@@ -275,6 +277,16 @@ export default function Monitoramento() {
             <option value="Suspensa">Suspensa</option>
             <option value="Inapta">Inapta</option>
             <option value="Baixada">Baixada</option>
+          </select>
+          <select
+            value={tagFilter}
+            onChange={(e) => setTagFilter(e.target.value)}
+            className="bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs"
+          >
+            <option value="">Todas as tags</option>
+            {tags.map((t) => (
+              <option key={t.id} value={t.id}>{t.name}</option>
+            ))}
           </select>
           <button
             onClick={() => setShowFavOnly((v) => !v)}
