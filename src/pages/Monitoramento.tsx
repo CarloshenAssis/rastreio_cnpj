@@ -154,7 +154,9 @@ export default function Monitoramento() {
     if (!name) return;
     const colors = ["#6366f1", "#22d3ee", "#22c55e", "#f59e0b", "#ef4444", "#a855f7"];
     const color = colors[Math.floor(Math.random() * colors.length)];
-    const { data, error } = await supabase.from("tags").insert({ name, color } as any).select().single();
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) { toast.error("Sessão expirada."); return; }
+    const { data, error } = await supabase.from("tags").insert({ name, color, user_id: user.id } as any).select().single();
     if (error) { toast.error(error.message); return; }
     setTags((prev) => [...prev, data as any]);
     setNewTagName("");
