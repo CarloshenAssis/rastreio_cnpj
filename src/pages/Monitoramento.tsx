@@ -15,6 +15,7 @@ import { formatCNPJ, formatDateTimeBR } from "@/lib/cnpj";
 import { RegimeBadge, StatusBadge, SimplesBadge } from "@/components/CNPJBadges";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { usePlan } from "@/hooks/usePlan";
 
 interface CNPJRow {
   id: string;
@@ -43,6 +44,8 @@ const FREQ_LABELS: Record<string, string> = {
 };
 
 export default function Monitoramento() {
+  const { plan } = usePlan();
+  const allowedFreqs = plan?.allowed_frequencies ?? ["monthly", "biweekly"];
   const [rows, setRows] = useState<CNPJRow[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
@@ -409,14 +412,14 @@ export default function Monitoramento() {
                     </td>
                     <td className="px-4 py-2.5">
                       <select
-                        value={r.frequency || "weekly"}
+                        value={r.frequency || "monthly"}
                         onChange={(e) => setFrequency(r.id, e.target.value)}
                         className="bg-transparent border border-border/50 rounded-sm px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground hover:border-primary/50 transition-colors"
                       >
-                        <option value="daily">Diário</option>
-                        <option value="weekly">Semanal</option>
-                        <option value="biweekly">Quinzenal</option>
-                        <option value="monthly">Mensal</option>
+                        {allowedFreqs.includes("daily") && <option value="daily">Diário</option>}
+                        {allowedFreqs.includes("weekly") && <option value="weekly">Semanal</option>}
+                        {allowedFreqs.includes("biweekly") && <option value="biweekly">Quinzenal</option>}
+                        {allowedFreqs.includes("monthly") && <option value="monthly">Mensal</option>}
                       </select>
                     </td>
                     <td className="px-4 py-2.5 text-muted-foreground">{formatDateTimeBR(r.last_checked_at)}</td>
