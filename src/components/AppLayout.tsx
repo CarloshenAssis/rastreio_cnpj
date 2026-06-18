@@ -1,14 +1,17 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, Link } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useAlerts } from "@/hooks/useAlerts";
+import { usePlan } from "@/hooks/usePlan";
 import { supabase } from "@/integrations/supabase/client";
 import {
   LayoutDashboard, Search, Activity, LogOut, TerminalSquare,
-  Bell, History, CreditCard, Shield,
+  Bell, History, CreditCard, Shield, Clock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+
+const ADMIN_EMAIL = "carloshen.senai@gmail.com";
 
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -17,12 +20,12 @@ const NAV = [
   { to: "/historico", label: "Histórico", icon: History },
   { to: "/alertas", label: "Alertas", icon: Bell, badge: true },
   { to: "/planos", label: "Planos", icon: CreditCard },
-  { to: "/admin", label: "Admin", icon: Shield },
 ];
 
 export default function AppLayout() {
   const { user, loading } = useAuth();
   const { unread } = useAlerts();
+  const { usage } = usePlan();
   const nav = useNavigate();
 
   useEffect(() => {
@@ -54,7 +57,7 @@ export default function AppLayout() {
           </div>
         </div>
         <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
-          {NAV.map(({ to, label, icon: Icon, badge }) => (
+          {[...NAV, ...(user?.email === ADMIN_EMAIL ? [{ to: "/admin", label: "Admin", icon: Shield, badge: false }] : [])].map(({ to, label, icon: Icon, badge }) => (
             <NavLink
               key={to}
               to={to}
@@ -98,7 +101,23 @@ export default function AppLayout() {
           </Button>
         </div>
       </aside>
-      <main className="flex-1 min-w-0 overflow-auto">
+      <main className="flex-1 min-w-0 overflow-auto flex flex-col">
+        {usage.isTrial && usage.trialDaysLeft !== null && (
+          <div className={cn(
+            "flex items-center justify-between px-5 py-2 text-xs font-mono border-b",
+            usage.trialDaysLeft <= 1
+              ? "bg-destructive/10 border-destructive/30 text-destructive"
+              : "bg-amber-500/10 border-amber-500/30 text-amber-400"
+          )}>
+            <div className="flex items-center gap-2">
+              <Clock className="h-3.5 w-3.5" />
+              {usage.trialDaysLeft === 0
+                ? "Seu trial expira hoje! Assine para continuar."
+                : `Trial grátis: ${usage.trialDaysLeft} dia${usage.trialDaysLeft === 1 ? "" : "s"} restante${usage.trialDaysLeft === 1 ? "" : "s"} do plano Starter.`}
+            </div>
+            <Link to="/planos" className="underline hover:no-underline">Assinar agora</Link>
+          </div>
+        )}
         <Outlet />
       </main>
     </div>

@@ -15,6 +15,7 @@ import { formatCNPJ, formatDateTimeBR } from "@/lib/cnpj";
 import { RegimeBadge, StatusBadge, SimplesBadge } from "@/components/CNPJBadges";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { usePlan } from "@/hooks/usePlan";
 
 interface CNPJRow {
   id: string;
@@ -43,6 +44,8 @@ const FREQ_LABELS: Record<string, string> = {
 };
 
 export default function Monitoramento() {
+  const { plan } = usePlan();
+  const allowedFreqs = plan?.allowed_frequencies ?? ["monthly", "biweekly"];
   const [rows, setRows] = useState<CNPJRow[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
@@ -149,6 +152,15 @@ export default function Monitoramento() {
       setFavorites((prev) => new Set([...prev, id]));
       setRows((prev) => prev.map((r) => r.id === id ? { ...r, isFavorite: true } : r));
     }
+  };
+
+  const deleteTag = async (tagId: string, tagName: string) => {
+    if (!confirm(`Apagar a tag "${tagName}"? Ela será removida de todas as empresas.`)) return;
+    const { error } = await supabase.from("tags").delete().eq("id", tagId);
+    if (error) { toast.error(error.message); return; }
+    setTags((prev) => prev.filter((t) => t.id !== tagId));
+    setRows((prev) => prev.map((r) => ({ ...r, tags: r.tags?.filter((t) => t.id !== tagId) || [] })));
+    toast.success(`Tag "${tagName}" apagada.`);
   };
 
   const createTag = async () => {
@@ -319,8 +331,11 @@ export default function Monitoramento() {
           <Tag className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">Tags:</span>
           {tags.map((tag) => (
-            <span key={tag.id} className="font-mono text-[10px] px-2 py-0.5 rounded-full border" style={{ borderColor: tag.color, color: tag.color }}>
+            <span key={tag.id} className="font-mono text-[10px] px-2 py-0.5 rounded-full border flex items-center gap-1" style={{ borderColor: tag.color, color: tag.color }}>
               {tag.name}
+              <button onClick={() => deleteTag(tag.id, tag.name)} title="Apagar tag" className="opacity-50 hover:opacity-100 transition-opacity">
+                <X className="h-2.5 w-2.5" />
+              </button>
             </span>
           ))}
           {showTagInput ? (
@@ -409,14 +424,14 @@ export default function Monitoramento() {
                     </td>
                     <td className="px-4 py-2.5">
                       <select
-                        value={r.frequency || "weekly"}
+                        value={r.frequency || "monthly"}
                         onChange={(e) => setFrequency(r.id, e.target.value)}
                         className="bg-transparent border border-border/50 rounded-sm px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground hover:border-primary/50 transition-colors"
                       >
-                        <option value="daily">Diário</option>
-                        <option value="weekly">Semanal</option>
-                        <option value="biweekly">Quinzenal</option>
-                        <option value="monthly">Mensal</option>
+                        {allowedFreqs.includes("daily") && <option value="daily">Diário</option>}
+                        {allowedFreqs.includes("weekly") && <option value="weekly">Semanal</option>}
+                        {allowedFreqs.includes("biweekly") && <option value="biweekly">Quinzenal</option>}
+                        {allowedFreqs.includes("monthly") && <option value="monthly">Mensal</option>}
                       </select>
                     </td>
                     <td className="px-4 py-2.5 text-muted-foreground">{formatDateTimeBR(r.last_checked_at)}</td>
