@@ -10,6 +10,8 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
+const ADMIN_EMAIL = "carloshen.senai@gmail.com";
+
 const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/consulta", label: "Consulta", icon: Search },
@@ -17,7 +19,6 @@ const NAV = [
   { to: "/historico", label: "Histórico", icon: History },
   { to: "/alertas", label: "Alertas", icon: Bell, badge: true },
   { to: "/planos", label: "Planos", icon: CreditCard },
-  { to: "/admin", label: "Admin", icon: Shield },
 ];
 
 export default function AppLayout() {
@@ -54,7 +55,7 @@ export default function AppLayout() {
           </div>
         </div>
         <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
-          {NAV.map(({ to, label, icon: Icon, badge }) => (
+          {[...NAV, ...(user?.email === ADMIN_EMAIL ? [{ to: "/admin", label: "Admin", icon: Shield, badge: false }] : [])].map(({ to, label, icon: Icon, badge }) => (
             <NavLink
               key={to}
               to={to}

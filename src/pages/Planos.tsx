@@ -58,6 +58,7 @@ export default function Planos() {
   const [loading, setLoading] = useState(true);
   const [accessCode, setAccessCode] = useState("");
   const [redeeming, setRedeeming] = useState(false);
+  const [subscribing, setSubscribing] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -67,13 +68,25 @@ export default function Planos() {
     })();
   }, []);
 
-  const handleSelectPlan = (plan: any) => {
+  const handleSelectPlan = async (plan: any) => {
     if (plan.name === "Personalizado") return;
     if (plan.price_cents === 0) {
       toast.info("Você já está no plano gratuito.");
       return;
     }
-    toast.info("Integração de pagamento em breve. Entre em contato para upgrade.");
+    if (currentPlan?.name === plan.name) return;
+    setSubscribing(plan.name);
+    try {
+      const { data, error } = await supabase.functions.invoke("mp-create-preference", {
+        body: { plan_name: plan.name },
+      });
+      if (error || data?.error) throw new Error(data?.error || error?.message);
+      window.location.href = data.init_point;
+    } catch (e: any) {
+      toast.error(e.message || "Erro ao iniciar pagamento.");
+    } finally {
+      setSubscribing(null);
+    }
   };
 
   const handleRedeem = async () => {
@@ -168,11 +181,11 @@ export default function Planos() {
 
                 <Button
                   onClick={() => handleSelectPlan(plan)}
-                  disabled={isCurrent}
+                  disabled={isCurrent || subscribing === plan.name}
                   className="font-mono text-xs uppercase w-full"
                   variant={plan.name === "Pro" ? "default" : "outline"}
                 >
-                  {isCurrent ? "Plano atual" : plan.price_cents === 0 ? "Usar grátis" : "Assinar"}
+                  {subscribing === plan.name ? "Aguarde…" : isCurrent ? "Plano atual" : plan.price_cents === 0 ? "Usar grátis" : "Assinar"}
                 </Button>
               </div>
             );
