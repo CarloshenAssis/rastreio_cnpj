@@ -504,6 +504,11 @@ export default function Index() {
                   Testar gratuitamente <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                 </Button>
               </Link>
+              <Link to="/login?plan=Starter">
+                <Button variant="ghost" className="w-full font-mono text-xs uppercase text-primary border border-primary/30 hover:bg-primary/10">
+                  Assinar agora →
+                </Button>
+              </Link>
             </div>
 
             {/* Pro */}
@@ -531,6 +536,11 @@ export default function Index() {
               <Link to="/login">
                 <Button className="w-full font-mono text-xs uppercase bg-primary hover:bg-primary-glow">
                   Testar gratuitamente <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                </Button>
+              </Link>
+              <Link to="/login?plan=Pro">
+                <Button variant="ghost" className="w-full font-mono text-xs uppercase text-primary border border-primary/30 hover:bg-primary/10">
+                  Assinar agora →
                 </Button>
               </Link>
             </div>
