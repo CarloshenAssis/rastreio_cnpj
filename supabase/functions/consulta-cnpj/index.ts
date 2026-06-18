@@ -171,10 +171,10 @@ Deno.serve(async (req) => {
     }
     const userId = userResp.user.id;
 
-    // Rate limiting: máx 100 consultas por hora por usuário
+    // Rate limiting: máx 500 consultas por hora por usuário
     const { data: rateOk } = await admin.rpc("check_rate_limit", {
       p_action: "consulta_cnpj",
-      p_limit: 100,
+      p_limit: 500,
       p_window_minutes: 60,
     });
     if (rateOk === false) {
@@ -189,13 +189,6 @@ Deno.serve(async (req) => {
     if (!cnpjs.length) {
       return new Response(JSON.stringify({ error: "no cnpjs" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
-
-    // Registra uso para rate limiting
-    await admin.from("usage_logs").insert({
-      user_id: userId,
-      action: "consulta_cnpj",
-      quantity: cnpjs.length,
-    });
 
     const results: any[] = [];
     const cutoff = new Date(Date.now() - CACHE_HOURS * 3600 * 1000).toISOString();
@@ -281,6 +274,12 @@ Deno.serve(async (req) => {
         source: data.source,
         data: { ...payload, id: cnpjId },
       });
+    }
+
+    // Registra uso real após as consultas
+    const successCount = results.filter(r => r.status !== "error").length;
+    if (successCount > 0) {
+      await admin.from("usage_logs").insert({ user_id: userId, action: "consulta_cnpj", quantity: successCount });
     }
 
     const summary = {
