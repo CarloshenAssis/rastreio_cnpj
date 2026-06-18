@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
 // Origens permitidas — só o domínio da Vercel e localhost para dev
 const ALLOWED_ORIGINS = [
+  "https://cnpjbrasiltrack.vercel.app",
   "https://cnpjtrack-sooty.vercel.app",
   "http://localhost:8080",
   "http://localhost:5173",
