@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { TerminalSquare, AlertCircle, ArrowLeft, Star, Rocket, Loader2 } from "lucide-react";
+import { AlertCircle, ArrowLeft, Star, Rocket, Loader2 } from "lucide-react";
+import { Logo } from "@/components/Logo";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -128,7 +129,7 @@ export default function Login() {
 
         {/* Logo */}
         <div className="flex items-center gap-2 mb-6 justify-center">
-          <TerminalSquare className="h-7 w-7 text-primary" />
+          <Logo className="h-10 w-10" />
           <div>
             <div className="font-mono text-xl font-semibold">CNPJ Brasil Track</div>
             <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">

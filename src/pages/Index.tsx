@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import {
-  TerminalSquare, ArrowRight, Check, X, Search, Activity, Bell,
+  ArrowRight, Check, X, Search, Activity, Bell,
   FileText, TrendingUp, Shield, BarChart2, Upload, Clock,
   CheckCircle2, AlertTriangle, ChevronDown, Sun, Moon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
+import { Logo } from "@/components/Logo";
 
 // ─── dados estáticos ───────────────────────────────────────────────────────
 
@@ -215,7 +216,7 @@ export default function Index() {
       {/* ── HEADER ── */}
       <header className="border-b border-border/50 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-10">
         <div className="flex items-center gap-2">
-          <TerminalSquare className="h-5 w-5 text-primary" />
+          <Logo className="h-8 w-8" />
           <span className="text-sm font-semibold tracking-tight">CNPJ Brasil Track</span>
           <span className="hidden lg:block text-[10px] text-muted-foreground uppercase tracking-widest ml-1">monitoramento fiscal</span>
         </div>
@@ -631,7 +632,7 @@ export default function Index() {
       {/* ── FOOTER ── */}
       <footer className="border-t border-border/50 px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-muted-foreground text-xs">
-          <TerminalSquare className="h-3.5 w-3.5 text-primary" />
+          <Logo className="h-5 w-5" />
           CNPJ Brasil Track © {new Date().getFullYear()} · Monitoramento fiscal para contadores
         </div>
         <div className="flex items-center gap-4">

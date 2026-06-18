@@ -4,9 +4,10 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAlerts } from "@/hooks/useAlerts";
 import { usePlan } from "@/hooks/usePlan";
 import { useTheme } from "@/hooks/useTheme";
+import { Logo } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  LayoutDashboard, Search, Activity, LogOut, TerminalSquare,
+  LayoutDashboard, Search, Activity, LogOut,
   Bell, History, CreditCard, Shield, Clock, Sun, Moon, Menu, X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -54,7 +55,7 @@ export default function AppLayout() {
   const SidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
     <>
       <div className="px-4 py-5 border-b border-sidebar-border flex items-center gap-2">
-        <TerminalSquare className="h-5 w-5 text-primary" />
+        <Logo className="h-8 w-8" />
         <div>
           <div className="font-mono text-sm font-semibold tracking-tight">CNPJ Brasil Track</div>
           <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">monitoramento fiscal</div>
@@ -160,7 +161,7 @@ export default function AppLayout() {
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2">
-            <TerminalSquare className="h-4 w-4 text-primary" />
+            <Logo className="h-6 w-6" />
             <span className="font-mono text-sm font-semibold tracking-tight">CNPJ Brasil Track</span>
           </div>
           <Button
