@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Fundo com gradiente verde -->
+  <rect width="200" height="200" rx="32" fill="#0f1f0f"/>
+  <!-- Brilho sutil no topo -->
+  <rect width="200" height="200" rx="32" fill="url(#grad)" opacity="0.4"/>
+
+  <!-- Terminal frame -->
+  <rect x="24" y="40" width="152" height="108" rx="8" fill="#0a2a0a" stroke="#22c55e" stroke-width="1.5" opacity="0.9"/>
+  <!-- Barra do terminal -->
+  <rect x="24" y="40" width="152" height="22" rx="8" fill="#16401a"/>
+  <rect x="24" y="51" width="152" height="11" fill="#16401a"/>
+  <!-- Bolinhas do terminal -->
+  <circle cx="40" cy="51" r="4" fill="#ff5f57"/>
+  <circle cx="54" cy="51" r="4" fill="#febc2e"/>
+  <circle cx="68" cy="51" r="4" fill="#28c840"/>
+
+  <!-- Texto dentro do terminal -->
+  <text x="36" y="84" font-family="monospace" font-size="11" fill="#22c55e" opacity="0.7">$ cnpj --monitor</text>
+  <text x="36" y="100" font-family="monospace" font-size="10" fill="#4ade80">✓ 247 CNPJs ativos</text>
+  <text x="36" y="115" font-family="monospace" font-size="10" fill="#facc15">⚠ 3 alterações</text>
+  <text x="36" y="130" font-family="monospace" font-size="10" fill="#22c55e">▋</text>
+
+  <!-- Nome abaixo -->
+  <text x="100" y="170" font-family="monospace" font-size="13" font-weight="bold" fill="#22c55e" text-anchor="middle" letter-spacing="1">CNPJ BRASIL TRACK</text>
+
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

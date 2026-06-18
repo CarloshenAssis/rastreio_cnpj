@@ -216,7 +216,7 @@ export default function Index() {
       <header className="border-b border-border/50 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-10">
         <div className="flex items-center gap-2">
           <TerminalSquare className="h-5 w-5 text-primary" />
-          <span className="text-sm font-semibold tracking-tight">CNPJTrack</span>
+          <span className="text-sm font-semibold tracking-tight">CNPJ Brasil Track</span>
           <span className="hidden lg:block text-[10px] text-muted-foreground uppercase tracking-widest ml-1">monitoramento fiscal</span>
         </div>
         <div className="flex items-center gap-2">
@@ -314,7 +314,7 @@ export default function Index() {
               ))}
             </div>
             <p className="text-sm font-semibold text-foreground pt-2">
-              Foi exatamente para eliminar esse trabalho que nasceu o CNPJTrack.
+              Foi exatamente para eliminar esse trabalho que nasceu o CNPJ Brasil Track.
             </p>
           </div>
         </div>
@@ -326,7 +326,7 @@ export default function Index() {
           <div className="text-center mb-10 sm:mb-12">
             <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-3">Como funciona</div>
             <h2 className="text-xl sm:text-2xl font-bold mb-3">
-              O CNPJTrack transforma horas de conferência manual em poucos segundos.
+              O CNPJ Brasil Track transforma horas de conferência manual em poucos segundos.
             </h2>
             <p className="text-muted-foreground text-sm">Basta:</p>
           </div>
@@ -380,13 +380,13 @@ export default function Index() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-10 sm:mb-12">
             <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-3">Transformação</div>
-            <h2 className="text-xl sm:text-2xl font-bold">Antes x Depois do CNPJTrack</h2>
+            <h2 className="text-xl sm:text-2xl font-bold">Antes x Depois do CNPJ Brasil Track</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
             <div className="terminal-card p-6 border-destructive/30 border-2">
               <div className="flex items-center gap-2 mb-5">
                 <X className="h-4 w-4 text-destructive" />
-                <span className="font-mono text-[10px] text-destructive uppercase tracking-widest font-bold">Antes do CNPJTrack</span>
+                <span className="font-mono text-[10px] text-destructive uppercase tracking-widest font-bold">Antes do CNPJ Brasil Track</span>
               </div>
               <ul className="space-y-3">
                 {BEFORE.map((item) => (
@@ -400,7 +400,7 @@ export default function Index() {
             <div className="terminal-card p-6 border-primary/40 border-2">
               <div className="flex items-center gap-2 mb-5">
                 <Check className="h-4 w-4 text-primary" />
-                <span className="font-mono text-[10px] text-primary uppercase tracking-widest font-bold">Depois do CNPJTrack</span>
+                <span className="font-mono text-[10px] text-primary uppercase tracking-widest font-bold">Depois do CNPJ Brasil Track</span>
               </div>
               <ul className="space-y-3">
                 {AFTER.map((item) => (
@@ -440,7 +440,7 @@ export default function Index() {
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-6 text-center">
           <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-3">Público-alvo</div>
-          <h2 className="text-2xl font-bold mb-8">Para quem é o CNPJTrack?</h2>
+          <h2 className="text-2xl font-bold mb-8">Para quem é o CNPJ Brasil Track?</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {FOR_WHO.map((item) => (
               <div key={item} className="terminal-card px-5 py-3 flex items-center gap-2 text-sm">
@@ -560,7 +560,7 @@ export default function Index() {
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-8">
             <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-3">Confiabilidade</div>
-            <h2 className="text-2xl font-bold">Por que confiar no CNPJTrack?</h2>
+            <h2 className="text-2xl font-bold">Por que confiar no CNPJ Brasil Track?</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {TRUST.map((item) => (
@@ -612,7 +612,7 @@ export default function Index() {
             Pare de desperdiçar horas fazendo conferências manuais.
           </h2>
           <p className="text-muted-foreground text-sm leading-relaxed mb-2 max-w-xl mx-auto">
-            Deixe que o CNPJTrack monitore toda a sua carteira automaticamente enquanto você foca no que realmente gera valor para seus clientes.
+            Deixe que o CNPJ Brasil Track monitore toda a sua carteira automaticamente enquanto você foca no que realmente gera valor para seus clientes.
           </p>
           <p className="text-muted-foreground/60 text-xs mb-8 sm:mb-10 px-2">
             De contador que passa horas conferindo CNPJs manualmente para um escritório que monitora centenas de empresas automaticamente e é avisado apenas quando algo realmente muda.
@@ -632,7 +632,7 @@ export default function Index() {
       <footer className="border-t border-border/50 px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-muted-foreground text-xs">
           <TerminalSquare className="h-3.5 w-3.5 text-primary" />
-          CNPJTrack © {new Date().getFullYear()} · Monitoramento fiscal para contadores
+          CNPJ Brasil Track © {new Date().getFullYear()} · Monitoramento fiscal para contadores
         </div>
         <div className="flex items-center gap-4">
           <Link to="/login" className="text-xs text-muted-foreground hover:text-primary transition-colors">

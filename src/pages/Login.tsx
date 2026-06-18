@@ -130,9 +130,9 @@ export default function Login() {
         <div className="flex items-center gap-2 mb-6 justify-center">
           <TerminalSquare className="h-7 w-7 text-primary" />
           <div>
-            <div className="font-mono text-xl font-semibold">CNPJTrack</div>
+            <div className="font-mono text-xl font-semibold">CNPJ Brasil Track</div>
             <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-              terminal de monitoramento fiscal
+              monitoramento fiscal de CNPJs
             </div>
           </div>
         </div>

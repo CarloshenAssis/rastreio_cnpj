@@ -56,8 +56,8 @@ export default function AppLayout() {
       <div className="px-4 py-5 border-b border-sidebar-border flex items-center gap-2">
         <TerminalSquare className="h-5 w-5 text-primary" />
         <div>
-          <div className="font-mono text-sm font-semibold tracking-tight">CNPJTrack</div>
-          <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">terminal fiscal</div>
+          <div className="font-mono text-sm font-semibold tracking-tight">CNPJ Brasil Track</div>
+          <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">monitoramento fiscal</div>
         </div>
       </div>
       <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
@@ -161,7 +161,7 @@ export default function AppLayout() {
           </button>
           <div className="flex items-center gap-2">
             <TerminalSquare className="h-4 w-4 text-primary" />
-            <span className="font-mono text-sm font-semibold tracking-tight">CNPJTrack</span>
+            <span className="font-mono text-sm font-semibold tracking-tight">CNPJ Brasil Track</span>
           </div>
           <Button
             onClick={toggle}

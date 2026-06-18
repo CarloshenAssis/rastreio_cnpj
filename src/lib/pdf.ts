@@ -144,7 +144,7 @@ export async function gerarRelatorioIndividual(
   doc.setFont("helvetica", "bold");
   doc.setFontSize(16);
   doc.setTextColor(...WHITE);
-  doc.text("CNPJTrack", margin, 11);
+  doc.text("CNPJ Brasil Track", margin, 11);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
@@ -493,7 +493,7 @@ export async function gerarRelatorioIndividual(
     doc.setFillColor(...PRIMARY);
     doc.rect(0, pageH - 10, pageW, 10, "F");
     doc.setFont("helvetica", "normal"); doc.setFontSize(7); doc.setTextColor(180, 180, 200);
-    doc.text("CNPJTrack — Plataforma de Monitoramento Fiscal", margin, pageH - 4);
+    doc.text("CNPJ Brasil Track — Plataforma de Monitoramento Fiscal", margin, pageH - 4);
     doc.text(
       `Documento gerado em ${formatDateTimeBR(new Date().toISOString())} · Página ${i}/${totalPages}`,
       pageW - margin, pageH - 4, { align: "right" }
@@ -503,7 +503,7 @@ export async function gerarRelatorioIndividual(
     doc.line(0, pageH - 10, pageW, pageH - 10);
   }
 
-  const filename = `CNPJTrack_${formatCNPJ(cnpj).replace(/\D/g, "")}_${new Date().toISOString().slice(0, 10)}.pdf`;
+  const filename = `CNPJ Brasil Track_${formatCNPJ(cnpj).replace(/\D/g, "")}_${new Date().toISOString().slice(0, 10)}.pdf`;
   doc.save(filename);
 }
 
@@ -541,7 +541,7 @@ export async function gerarRelatorioLote(
   doc.setFillColor(...PRIMARY);
   doc.rect(0, 0, pageW, 22, "F");
   doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(...WHITE);
-  doc.text("CNPJTrack", margin, 9);
+  doc.text("CNPJ Brasil Track", margin, 9);
   doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(180, 180, 200);
   doc.text("Plataforma de Monitoramento Fiscal", margin, 15);
   doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(...WHITE);
@@ -621,10 +621,10 @@ export async function gerarRelatorioLote(
     doc.setFillColor(...PRIMARY);
     doc.rect(0, pageH - 8, pageW, 8, "F");
     doc.setFont("helvetica", "normal"); doc.setFontSize(6.5); doc.setTextColor(180, 180, 200);
-    doc.text("CNPJTrack — Plataforma de Monitoramento Fiscal · Uso exclusivo do contador", margin, pageH - 3);
+    doc.text("CNPJ Brasil Track — Plataforma de Monitoramento Fiscal · Uso exclusivo do contador", margin, pageH - 3);
     doc.text(`Página ${i}/${totalPages}`, pageW - margin, pageH - 3, { align: "right" });
   }
 
   const date = new Date().toISOString().slice(0, 10);
-  doc.save(`CNPJTrack_Monitoramento_Lote_${date}.pdf`);
+  doc.save(`CNPJ Brasil Track_Monitoramento_Lote_${date}.pdf`);
 }
