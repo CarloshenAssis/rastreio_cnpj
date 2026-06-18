@@ -2,11 +2,25 @@
 // Cache 24h em public.cnpjs. Detecta mudanças e grava em cnpj_history.
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-};
+// Origens permitidas — só o domínio da Vercel e localhost para dev
+const ALLOWED_ORIGINS = [
+  "https://cnpjtrack-sooty.vercel.app",
+  "http://localhost:8080",
+  "http://localhost:5173",
+  "http://localhost:5174",
+];
+
+function getCorsHeaders(origin: string | null) {
+  const allowed = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    "Access-Control-Allow-Origin": allowed,
+    "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Credentials": "true",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+  };
+}
 
 interface NormalizedCNPJ {
   cnpj: string;
@@ -121,13 +135,31 @@ const TRACKED_FIELDS: (keyof NormalizedCNPJ)[] = [
 ];
 
 Deno.serve(async (req) => {
+  const origin = req.headers.get("Origin");
+  const corsHeaders = getCorsHeaders(origin);
+
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+
+  // Bloqueia origens não autorizadas em produção
+  if (origin && !ALLOWED_ORIGINS.includes(origin)) {
+    return new Response(JSON.stringify({ error: "origin not allowed" }), {
+      status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const authHeader = req.headers.get("Authorization") || "";
-    const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_PUBLISHABLE_KEY") ?? Deno.env.get("SUPABASE_ANON_KEY")!, {
+
+    // Rejeita requests sem token de autenticação
+    if (!authHeader.startsWith("Bearer ")) {
+      return new Response(JSON.stringify({ error: "unauthorized" }), {
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
       global: { headers: { Authorization: authHeader } },
     });
     const admin = createClient(supabaseUrl, serviceKey);
@@ -138,12 +170,31 @@ Deno.serve(async (req) => {
     }
     const userId = userResp.user.id;
 
+    // Rate limiting: máx 100 consultas por hora por usuário
+    const { data: rateOk } = await admin.rpc("check_rate_limit", {
+      p_action: "consulta_cnpj",
+      p_limit: 100,
+      p_window_minutes: 60,
+    });
+    if (rateOk === false) {
+      return new Response(JSON.stringify({ error: "rate_limit_exceeded", message: "Limite de 100 consultas por hora atingido." }), {
+        status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const body = await req.json().catch(() => ({}));
     const cnpjs: string[] = Array.isArray(body.cnpjs) ? body.cnpjs : [];
     const force: boolean = !!body.force;
     if (!cnpjs.length) {
       return new Response(JSON.stringify({ error: "no cnpjs" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
+
+    // Registra uso para rate limiting
+    await admin.from("usage_logs").insert({
+      user_id: userId,
+      action: "consulta_cnpj",
+      quantity: cnpjs.length,
+    });
 
     const results: any[] = [];
     const cutoff = new Date(Date.now() - CACHE_HOURS * 3600 * 1000).toISOString();
