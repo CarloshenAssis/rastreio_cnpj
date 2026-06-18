@@ -1,3 +1,4 @@
+// PDF generator — v2
 import { supabase } from "@/integrations/supabase/client";
 import { formatCNPJ } from "@/lib/cnpj";
 
