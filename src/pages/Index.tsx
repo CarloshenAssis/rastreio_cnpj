@@ -12,9 +12,9 @@ const FEATURES = [
 ];
 
 const PLANS = [
-  { name: "Free", price: "Grátis", features: ["20 CNPJs/mês", "10 monitorados", "3 PDFs/mês", "Regime e status"], icon: Zap, color: "border-border" },
-  { name: "Starter", price: "R$ 19,90/mês", features: ["100 CNPJs/mês", "20 monitorados", "10 PDFs/mês", "Alertas por e-mail"], icon: Star, color: "border-primary/60" },
-  { name: "Pro", price: "R$ 44,90/mês", features: ["2.000 CNPJs/mês", "50 monitorados", "100 PDFs/mês", "Monitoramento diário"], icon: Rocket, color: "border-primary", highlight: true },
+  { name: "Trial 7 dias", price: "Grátis", features: ["100 CNPJs/mês", "50 monitorados", "50 PDFs/mês", "10 exports/mês", "Alertas por e-mail"], icon: Zap, color: "border-border", trial: true },
+  { name: "Starter", price: "R$ 19,90/mês", features: ["100 CNPJs/mês", "50 monitorados", "50 PDFs/mês", "10 exports/mês", "Alertas por e-mail"], icon: Star, color: "border-primary/60" },
+  { name: "Pro", price: "R$ 44,90/mês", features: ["2.000 CNPJs/mês", "500 monitorados", "100 PDFs/mês", "50 exports/mês", "Monitoramento diário"], icon: Rocket, color: "border-primary", highlight: true },
 ];
 
 export default function Index() {
@@ -95,16 +95,20 @@ export default function Index() {
         <div className="max-w-5xl mx-auto px-6">
           <div className="text-center mb-12">
             <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-3">Preços</div>
-            <h2 className="text-2xl font-bold">Plano para cada tamanho de operação</h2>
+            <h2 className="text-2xl font-bold">7 dias grátis, depois escolha seu plano</h2>
+            <p className="text-muted-foreground text-sm mt-2">Sem cartão de crédito. Cancele quando quiser.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {PLANS.map(({ name, price, features, icon: Icon, color, highlight }) => (
+            {PLANS.map(({ name, price, features, icon: Icon, color, highlight, trial }: any) => (
               <div
                 key={name}
                 className={`terminal-card p-6 flex flex-col gap-4 border-2 ${color} ${highlight ? "ring-1 ring-primary/40 scale-[1.02]" : ""}`}
               >
                 {highlight && (
                   <div className="text-[10px] text-primary uppercase tracking-widest font-bold">Mais popular</div>
+                )}
+                {trial && (
+                  <div className="text-[10px] text-amber-400 uppercase tracking-widest font-bold">7 dias grátis</div>
                 )}
                 <div className="flex items-center gap-2 text-primary">
                   <Icon className="h-5 w-5" />
@@ -124,7 +128,7 @@ export default function Index() {
                     className="w-full font-mono text-xs uppercase"
                     variant={highlight ? "default" : "outline"}
                   >
-                    {name === "Free" ? "Começar grátis" : "Assinar"}
+                    {trial ? "Começar trial grátis" : "Assinar"}
                   </Button>
                 </Link>
               </div>

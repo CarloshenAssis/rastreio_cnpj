@@ -20,6 +20,9 @@ export interface UsageStats {
   monitoredCount: number;
   pdfsThisMonth: number;
   exportsThisMonth: number;
+  isTrial: boolean;
+  trialEndsAt: string | null;
+  trialDaysLeft: number | null;
 }
 
 const FREE_PLAN: Plan = {
@@ -38,7 +41,7 @@ const FREE_PLAN: Plan = {
 
 export function usePlan() {
   const [plan, setPlan] = useState<Plan | null>(null);
-  const [usage, setUsage] = useState<UsageStats>({ queriesThisMonth: 0, monitoredCount: 0, pdfsThisMonth: 0, exportsThisMonth: 0 });
+  const [usage, setUsage] = useState<UsageStats>({ queriesThisMonth: 0, monitoredCount: 0, pdfsThisMonth: 0, exportsThisMonth: 0, isTrial: false, trialEndsAt: null, trialDaysLeft: null });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -49,7 +52,7 @@ export function usePlan() {
       const som = startOfMonth.toISOString();
 
       const [{ data: userPlanData }, { data: usageLogs }, { data: cnpjs }] = await Promise.all([
-        supabase.from("user_plans").select("*, plans(*)").maybeSingle(),
+        supabase.from("user_plans").select("*, plans(*), is_trial, current_period_end").maybeSingle(),
         supabase.from("usage_logs").select("action,quantity").gte("created_at", som),
         supabase.from("cnpjs").select("id", { count: "exact", head: true }),
       ]);
@@ -71,11 +74,20 @@ export function usePlan() {
       const pdfs = logs.filter((l: any) => l.action === "pdf_gerado").reduce((a: number, l: any) => a + (l.quantity || 1), 0);
       const exports = logs.filter((l: any) => l.action === "export_lote").reduce((a: number, l: any) => a + (l.quantity || 1), 0);
 
+      const isTrial = !!(userPlanData as any)?.is_trial;
+      const trialEndsAt = (userPlanData as any)?.current_period_end ?? null;
+      const trialDaysLeft = isTrial && trialEndsAt
+        ? Math.max(0, Math.ceil((new Date(trialEndsAt).getTime() - Date.now()) / 86400000))
+        : null;
+
       setUsage({
         queriesThisMonth: queries,
         monitoredCount: (cnpjs as any)?.length ?? 0,
         pdfsThisMonth: pdfs,
         exportsThisMonth: exports,
+        isTrial,
+        trialEndsAt,
+        trialDaysLeft,
       });
       setLoading(false);
     })();
