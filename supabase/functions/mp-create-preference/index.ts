@@ -106,8 +106,12 @@ Deno.serve(async (req) => {
     amount_cents: Math.round(planInfo.amount * 100),
   });
 
+  // Com token de teste (TEST-...), usa sandbox_init_point para não redirecionar para produção
+  const isTest = mpToken.startsWith("TEST-");
+  const checkoutUrl = isTest ? mpData.sandbox_init_point : mpData.init_point;
+
   return new Response(
-    JSON.stringify({ init_point: mpData.init_point, sandbox_init_point: mpData.sandbox_init_point }),
+    JSON.stringify({ init_point: checkoutUrl }),
     { headers: { ...cors, "Content-Type": "application/json" } }
   );
 });
