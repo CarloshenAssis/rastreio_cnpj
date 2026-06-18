@@ -108,8 +108,8 @@ export default function Planos() {
             Seu consumo — {new Date().toLocaleString("pt-BR", { month: "long", year: "numeric" })}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <UsageLine label="Consultas" value={usage.queriesThisMonth} max={currentPlan?.max_queries ?? 20} />
-            <UsageLine label="Monitoradas" value={usage.monitoredCount} max={currentPlan?.max_monitored ?? 10} />
+            <UsageLine label="CNPJs consultados" value={usage.queriesThisMonth} max={currentPlan?.max_queries ?? 20} />
+            <UsageLine label="CNPJs monitorados" value={usage.monitoredCount} max={currentPlan?.max_monitored ?? 10} />
             <UsageLine label="PDFs gerados" value={usage.pdfsThisMonth} max={currentPlan?.max_pdfs ?? 3} />
             <UsageLine label="Exports lote" value={usage.exportsThisMonth} max={currentPlan?.max_exports ?? 1} />
           </div>
