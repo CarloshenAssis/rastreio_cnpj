@@ -1,11 +1,14 @@
 {
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
-    { "source": "/robots.txt", "destination": "/robots.txt" },
-    { "source": "/googleddc91b1417ed31ac.html", "destination": "/googleddc91b1417ed31ac.html" },
-    { "source": "/((?!sitemap.xml|robots.txt|favicon.svg|logo.svg|googleddc91b1417ed31ac.html).*)", "destination": "/index.html" }
+    { "source": "/((?!sitemap\\.xml|robots\\.txt|favicon\\.svg|favicon\\.ico|logo\\.svg|googleddc91b1417ed31ac\\.html|placeholder\\.svg).*)", "destination": "/index.html" }
   ],
   "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Content-Type", "value": "application/xml; charset=utf-8" }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
