@@ -51,13 +51,13 @@ export default function Alertas() {
         }
       />
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {loading ? (
           <div className="terminal-card p-8 text-center font-mono text-xs text-muted-foreground">
             Carregando alertas…
           </div>
         ) : alerts.length === 0 ? (
-          <div className="terminal-card p-12 flex flex-col items-center gap-3 text-center">
+          <div className="terminal-card p-6 sm:p-12 flex flex-col items-center gap-3 text-center">
             <BellOff className="h-8 w-8 text-muted-foreground/40" />
             <div className="font-mono text-xs text-muted-foreground">
               Nenhum alerta gerado ainda.
@@ -72,7 +72,7 @@ export default function Alertas() {
               <div
                 key={alert.id}
                 className={cn(
-                  "flex items-start gap-3 px-5 py-4 transition-colors",
+                  "flex items-start gap-3 px-3 py-3 sm:px-5 sm:py-4 transition-colors",
                   !alert.read_at && "bg-primary/5 hover:bg-primary/10",
                   alert.read_at && "hover:bg-muted/10 opacity-70"
                 )}

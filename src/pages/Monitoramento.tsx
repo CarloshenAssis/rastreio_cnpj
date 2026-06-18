@@ -280,14 +280,14 @@ export default function Monitoramento() {
         }
       />
 
-      <div className="p-6 space-y-4">
+      <div className="p-3 sm:p-6 space-y-4">
         {/* Filtros */}
-        <div className="terminal-card p-3 flex items-center gap-3 flex-wrap">
-          <div className="relative flex-1 min-w-[200px]">
+        <div className="terminal-card p-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="relative w-full sm:flex-1 sm:min-w-[200px]">
             <Search className="h-3.5 w-3.5 text-muted-foreground absolute left-2.5 top-1/2 -translate-y-1/2" />
             <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Buscar por CNPJ ou razão social…" className="pl-8 font-mono text-xs h-8" />
           </div>
-          <select value={regimeFilter} onChange={(e) => setRegimeFilter(e.target.value)} className="bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs">
+          <select value={regimeFilter} onChange={(e) => setRegimeFilter(e.target.value)} className="w-full sm:w-auto bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs">
             <option value="">Todos regimes</option>
             <option value="MEI">MEI</option>
             <option value="Simples">Simples</option>
@@ -295,7 +295,7 @@ export default function Monitoramento() {
             <option value="Lucro Real">Lucro Real</option>
             <option value="Indefinido">Indefinido</option>
           </select>
-          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs">
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-full sm:w-auto bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs">
             <option value="">Todos status</option>
             <option value="Ativa">Ativa</option>
             <option value="Suspensa">Suspensa</option>
@@ -305,7 +305,7 @@ export default function Monitoramento() {
           <select
             value={tagFilter}
             onChange={(e) => setTagFilter(e.target.value)}
-            className="bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs"
+            className="w-full sm:w-auto bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs"
           >
             <option value="">Todas as tags</option>
             {tags.map((t) => (
@@ -360,7 +360,7 @@ export default function Monitoramento() {
               {rows.length === 0 ? "Nenhum CNPJ monitorado ainda. Vá em Consulta para adicionar." : "Nenhum resultado para os filtros."}
             </div>
           ) : (
-            <table className="data-table w-full">
+            <table className="data-table w-full min-w-[800px]">
               <thead className="bg-background-deep/40">
                 <tr>
                   <th className="px-3 py-2.5 w-8"><Checkbox checked={allChecked} onCheckedChange={toggleAll} /></th>

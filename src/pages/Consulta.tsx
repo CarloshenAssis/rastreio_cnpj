@@ -113,13 +113,13 @@ export default function Consulta() {
   return (
     <div>
       <PageHeader title="Consulta" subtitle="Importe ou pesquise CNPJs em lote" />
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-6">
         <div className="terminal-card p-5">
           <Tabs defaultValue="paste">
-            <TabsList className="grid grid-cols-3 mb-5 max-w-xl">
-              <TabsTrigger value="paste" className="font-mono text-[11px] uppercase">Colar Lista</TabsTrigger>
-              <TabsTrigger value="upload" className="font-mono text-[11px] uppercase">Upload Arquivo</TabsTrigger>
-              <TabsTrigger value="single" className="font-mono text-[11px] uppercase">CNPJ Individual</TabsTrigger>
+            <TabsList className="grid grid-cols-3 mb-5 w-full max-w-xl">
+              <TabsTrigger value="paste" className="font-mono text-[10px] sm:text-[11px] uppercase px-1 sm:px-3">Colar Lista</TabsTrigger>
+              <TabsTrigger value="upload" className="font-mono text-[10px] sm:text-[11px] uppercase px-1 sm:px-3">Upload</TabsTrigger>
+              <TabsTrigger value="single" className="font-mono text-[10px] sm:text-[11px] uppercase px-1 sm:px-3">Individual</TabsTrigger>
             </TabsList>
 
             <TabsContent value="paste" className="space-y-3">
@@ -127,7 +127,7 @@ export default function Consulta() {
                 value={pasted}
                 onChange={(e) => setPasted(e.target.value)}
                 placeholder="Cole aqui os CNPJs (um por linha ou separados por vírgula)"
-                className="font-mono text-xs min-h-[200px] resize-y"
+                className="font-mono text-xs min-h-[120px] sm:min-h-[200px] resize-y"
               />
               <div className="flex items-center justify-between">
                 <div className="font-mono text-[11px] text-muted-foreground">
@@ -151,7 +151,7 @@ export default function Consulta() {
             </TabsContent>
 
             <TabsContent value="single" className="space-y-3">
-              <div className="max-w-md">
+              <div className="w-full max-w-md">
                 <Input
                   value={singleMasked}
                   onChange={(e) => handleSingleChange(e.target.value)}
@@ -210,7 +210,7 @@ export default function Consulta() {
               </Button>
             </div>
             <div className="overflow-x-auto">
-              <table className="data-table w-full">
+              <table className="data-table w-full min-w-[700px]">
                 <thead className="bg-background-deep/40">
                   <tr>
                     <th className="text-left px-4 py-2.5">CNPJ</th>

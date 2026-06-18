@@ -134,7 +134,7 @@ export default function Dashboard() {
         }
       />
 
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-6">
         {/* Cards principais */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
           <StatCard label="Monitorados" value={loading ? "—" : counts.total} accent="primary" />
@@ -236,7 +236,7 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="data-table w-full">
+              <table className="data-table w-full min-w-[600px]">
                 <thead className="bg-background-deep/40">
                   <tr>
                     <th className="text-left px-4 py-2.5">CNPJ</th>

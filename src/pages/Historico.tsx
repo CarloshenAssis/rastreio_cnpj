@@ -61,7 +61,7 @@ export default function Historico() {
         subtitle={`${rows.length} registros de auditoria`}
       />
 
-      <div className="p-6 space-y-4">
+      <div className="p-4 sm:p-6 space-y-4">
         <div className="terminal-card p-3">
           <div className="relative">
             <Search className="h-3.5 w-3.5 text-muted-foreground absolute left-2.5 top-1/2 -translate-y-1/2" />
@@ -84,7 +84,7 @@ export default function Historico() {
                 : "Nenhum resultado para o filtro."}
             </div>
           ) : (
-            <table className="data-table w-full">
+            <table className="data-table w-full min-w-[600px]">
               <thead className="bg-background-deep/40">
                 <tr>
                   <th className="text-left px-4 py-2.5">Data</th>
