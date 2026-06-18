@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Relatório Completo — CNPJTrack</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    line-height: 1.6;
+    color: #1e1e2e;
+    background: #fff;
+    padding: 0;
+  }
+
+  @media print {
+    body { font-size: 10px; }
+    .no-print { display: none; }
+    .page-break { page-break-before: always; }
+    h2 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+  }
+
+  .cover {
+    background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+    color: #fff;
+    padding: 60px 50px;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom: 4px solid #6366f1;
+  }
+
+  .cover-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .cover-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .cover-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #6366f1;
+    margin-top: 3px;
+  }
+
+  .cover-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 40px;
+    line-height: 1.3;
+  }
+
+  .cover-subtitle {
+    color: #a0aec0;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+
+  .cover-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 30px;
+  }
+
+  .cover-meta-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .cover-meta-item span {
+    display: block;
+    color: #cbd5e0;
+    font-size: 11px;
+    margin-top: 2px;
+  }
+
+  .content {
+    padding: 32px 50px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e1e2e;
+    margin: 32px 0 16px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #6366f1;
+  }
+
+  h2 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 28px 0 10px;
+    padding: 6px 10px;
+    background: #eef0ff;
+    border-left: 3px solid #6366f1;
+    border-radius: 2px;
+  }
+
+  h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 20px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  p {
+    margin-bottom: 10px;
+    color: #4a5568;
+    line-height: 1.7;
+  }
+
+  strong { color: #1e1e2e; }
+
+  ul, ol {
+    margin: 8px 0 12px 18px;
+    color: #4a5568;
+  }
+
+  li { margin-bottom: 4px; line-height: 1.6; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 20px;
+    font-size: 10px;
+  }
+
+  th {
+    background: #1e1e2e;
+    color: #fff;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #4a5568;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr:hover td { background: #eef0ff; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-blue { background: #dbeafe; color: #1d4ed8; }
+  .badge-green { background: #dcfce7; color: #15803d; }
+  .badge-orange { background: #ffedd5; color: #c2410c; }
+  .badge-purple { background: #ede9fe; color: #7c3aed; }
+  .badge-gray { background: #f1f5f9; color: #475569; }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .kpi {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 14px;
+    text-align: center;
+    border-top: 3px solid #6366f1;
+  }
+
+  .kpi-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e1e2e;
+    font-family: 'JetBrains Mono', monospace;
+    display: block;
+  }
+
+  .kpi-label {
+    font-size: 9px;
+    color: #718096;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 3px;
+    display: block;
+  }
+
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .plan-card {
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 14px;
+    background: #fff;
+  }
+
+  .plan-card.featured { border-color: #6366f1; background: #f8f9ff; }
+  .plan-card.gold { border-color: #f59e0b; background: #fffbeb; }
+
+  .plan-name {
+    font-weight: 700;
+    font-size: 12px;
+    color: #1e1e2e;
+    margin-bottom: 4px;
+  }
+
+  .plan-price {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: #6366f1;
+    margin-bottom: 8px;
+  }
+
+  .plan-card.gold .plan-price { color: #d97706; }
+
+  .plan-item {
+    font-size: 9px;
+    color: #64748b;
+    margin-bottom: 3px;
+    padding-left: 10px;
+    position: relative;
+  }
+
+  .plan-item::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+    font-weight: 700;
+  }
+
+  .plan-card.gold .plan-item::before { color: #d97706; }
+
+  .info-box {
+    background: #f0f9ff;
+    border-left: 3px solid #0ea5e9;
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin: 10px 0;
+    font-size: 10px;
+    color: #0369a1;
+  }
+
+  .warn-box {
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin: 10px 0;
+    font-size: 10px;
+    color: #92400e;
+  }
+
+  .success-box {
+    background: #f0fdf4;
+    border-left: 3px solid #22c55e;
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin: 10px 0;
+    font-size: 10px;
+    color: #14532d;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    background: #e2e8f0;
+    color: #475569;
+    margin: 1px;
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 2px dashed #e2e8f0;
+    margin: 28px 0;
+  }
+
+  .pain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+
+  .pain-item {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 10px;
+    line-height: 1.5;
+  }
+
+  .pain-before {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #7f1d1d;
+  }
+
+  .pain-after {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #14532d;
+  }
+
+  .pain-label {
+    font-weight: 700;
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+
+  .flow-steps {
+    display: flex;
+    gap: 0;
+    margin: 12px 0;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .flow-step {
+    flex: 1;
+    padding: 10px 8px;
+    text-align: center;
+    background: #f8fafc;
+    border-right: 1px solid #e2e8f0;
+    position: relative;
+  }
+
+  .flow-step:last-child { border-right: none; }
+
+  .flow-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #6366f1;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .flow-step-title {
+    font-size: 9px;
+    font-weight: 600;
+    color: #1e1e2e;
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .flow-step-desc {
+    font-size: 8px;
+    color: #64748b;
+    line-height: 1.4;
+  }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 12px 0;
+  }
+
+  .status-item {
+    padding: 8px 10px;
+    border-radius: 5px;
+    font-size: 9px;
+    text-align: center;
+  }
+
+  .status-done { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+  .status-pending { background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+  .status-todo { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+  .status-icon { font-size: 12px; display: block; margin-bottom: 3px; }
+  .status-label { font-weight: 600; }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 9px;
+    color: #6366f1;
+  }
+
+  .footer {
+    background: #1e1e2e;
+    color: #718096;
+    text-align: center;
+    padding: 20px 50px;
+    font-size: 9px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 40px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .print-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(99,102,241,0.4);
+    z-index: 999;
+  }
+
+  .print-btn:hover { background: #4f46e5; }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">⬇ Salvar como PDF</button>
+
+<!-- CAPA -->
+<div class="cover">
+  <div class="cover-top">
+    <div>
+      <div class="cover-logo">⬛ CNPJTrack</div>
+      <div class="cover-tag">terminal de monitoramento fiscal</div>
+    </div>
+  </div>
+  <div>
+    <div class="cover-title">Relatório Completo do Sistema</div>
+    <div class="cover-subtitle">Regras de negócio · Arquitetura · Funcionalidades · Banco de dados · Integrações</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">Versão<span>1.0 — Junho 2026</span></div>
+      <div class="cover-meta-item">Repositório<span>CarloshenAssis/rastreio_cnpj</span></div>
+      <div class="cover-meta-item">Deploy<span>Vercel (main branch)</span></div>
+      <div class="cover-meta-item">Banco<span>Supabase auqiidjpncjmddicpbeu</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<h1>1. Visão Geral do Produto</h1>
+
+<p><strong>CNPJTrack</strong> é uma plataforma SaaS web voltada exclusivamente para <strong>contadores e escritórios de contabilidade brasileiros</strong>. O sistema consulta dados fiscais de empresas diretamente na Receita Federal (via BrasilAPI com fallback para ReceitaWS), armazena o histórico de alterações e alerta o contador quando qualquer mudança é detectada — regime tributário, status cadastral, entrada/saída do Simples Nacional.</p>
+
+<div class="warn-box">
+  <strong>Problema central:</strong> Contadores precisam verificar manualmente a situação fiscal de cada cliente todo mês para enviar obrigações à Receita. Esse processo é feito um a um, sem histórico, sem alertas e sem rastreabilidade. O CNPJTrack elimina esse trabalho repetitivo.
+</div>
+
+<h2>Dores que resolve</h2>
+<div class="pain-grid">
+  <div class="pain-item pain-before"><div class="pain-label">❌ Antes</div>Verificar 50 clientes manualmente todo mês, acessando a Receita um por um</div>
+  <div class="pain-item pain-after"><div class="pain-label">✅ Depois</div>Consulta em lote: cola todos os CNPJs de uma vez e recebe resultado em segundos</div>
+
+  <div class="pain-item pain-before"><div class="pain-label">❌ Antes</div>Não saber quando um cliente saiu do Simples Nacional ou mudou de regime</div>
+  <div class="pain-item pain-after"><div class="pain-label">✅ Depois</div>Alerta automático assim que qualquer mudança é detectada</div>
+
+  <div class="pain-item pain-before"><div class="pain-label">❌ Antes</div>Sem prova auditável de quando a situação de uma empresa mudou</div>
+  <div class="pain-item pain-after"><div class="pain-label">✅ Depois</div>Histórico completo com data/hora de cada alteração, exportável em PDF</div>
+
+  <div class="pain-item pain-before"><div class="pain-label">❌ Antes</div>Perder tempo formatando dados da Receita em relatório para o cliente</div>
+  <div class="pain-item pain-after"><div class="pain-label">✅ Depois</div>PDF individual profissional gerado em 1 clique com QSA, CNAEs e histórico</div>
+
+  <div class="pain-item pain-before"><div class="pain-label">❌ Antes</div>Planilha enorme de CNPJs para consultar sem ferramenta específica</div>
+  <div class="pain-item pain-after"><div class="pain-label">✅ Depois</div>Upload direto de .xlsx ou .csv com detecção automática da coluna de CNPJ</div>
+
+  <div class="pain-item pain-before"><div class="pain-label">❌ Antes</div>Sem visão agregada da carteira: quantos clientes ativos, inativos, no Simples</div>
+  <div class="pain-item pain-after"><div class="pain-label">✅ Depois</div>Dashboard com gráficos de distribuição por regime e status de toda a carteira</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<hr class="section-divider">
+<h1>2. Stack Tecnológica</h1>
+
+<table>
+  <tr><th>Camada</th><th>Tecnologia</th><th>Função</th></tr>
+  <tr><td>Frontend</td><td>React 18 + Vite + TypeScript</td><td>Interface SPA</td></tr>
+  <tr><td>Estilo</td><td>Tailwind CSS + tema dark "terminal"</td><td>Design system personalizado</td></tr>
+  <tr><td>Componentes</td><td>shadcn/ui</td><td>Biblioteca de componentes acessíveis</td></tr>
+  <tr><td>Roteamento</td><td>React Router DOM v6</td><td>Navegação entre páginas</td></tr>
+  <tr><td>Estado</td><td>TanStack React Query</td><td>Cache e sincronização de dados</td></tr>
+  <tr><td>Backend / DB</td><td>Supabase (PostgreSQL + RLS + Auth)</td><td>Banco, autenticação, segurança</td></tr>
+  <tr><td>Edge Functions</td><td>Deno (Supabase Functions)</td><td>Lógica de negócio serverless</td></tr>
+  <tr><td>Geração de PDF</td><td>jsPDF + jspdf-autotable</td><td>Relatórios PDF individuais e em lote</td></tr>
+  <tr><td>Export planilhas</td><td>xlsx + papaparse</td><td>Importação/exportação CSV e XLSX</td></tr>
+  <tr><td>Gráficos</td><td>Recharts</td><td>Dashboard visual</td></tr>
+  <tr><td>Pagamento</td><td>Mercado Pago (Checkout Pro)</td><td>Assinaturas Starter e Pro</td></tr>
+  <tr><td>Deploy</td><td>Vercel</td><td>Hospedagem + CI/CD automático</td></tr>
+  <tr><td>API fiscal (primária)</td><td>BrasilAPI</td><td>Dados da Receita Federal</td></tr>
+  <tr><td>API fiscal (fallback)</td><td>ReceitaWS</td><td>Backup quando BrasilAPI falha</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1>3. Regras de Negócio</h1>
+
+<h2>3.1 Planos e Limites</h2>
+
+<div class="plan-grid">
+  <div class="plan-card">
+    <div class="plan-name">⚡ Free</div>
+    <div class="plan-price">Grátis</div>
+    <div class="plan-item">5 consultas/mês</div>
+    <div class="plan-item">0 empresas monitoradas</div>
+    <div class="plan-item">0 PDFs/mês</div>
+    <div class="plan-item">0 exports/mês</div>
+    <div class="plan-item">Sem alertas por email</div>
+    <div style="margin-top:8px;font-size:8px;color:#94a3b8;font-style:italic;">Plano residual pós-trial expirado</div>
+  </div>
+  <div class="plan-card featured">
+    <div class="plan-name">⭐ Starter</div>
+    <div class="plan-price">R$ 19,90/mês</div>
+    <div class="plan-item">100 consultas/mês</div>
+    <div class="plan-item">50 empresas monitoradas</div>
+    <div class="plan-item">50 PDFs/mês</div>
+    <div class="plan-item">10 exports/mês</div>
+    <div class="plan-item">Alertas por email</div>
+    <div class="plan-item">Frequências: Mensal e Quinzenal</div>
+    <div class="plan-item">Tags disponível</div>
+    <div style="margin-top:8px;font-size:8px;color:#6366f1;font-style:italic;">✓ 7 dias grátis no cadastro</div>
+  </div>
+  <div class="plan-card">
+    <div class="plan-name">🚀 Pro</div>
+    <div class="plan-price">R$ 44,90/mês</div>
+    <div class="plan-item">2.000 consultas/mês</div>
+    <div class="plan-item">500 empresas monitoradas</div>
+    <div class="plan-item">100 PDFs/mês</div>
+    <div class="plan-item">50 exports/mês</div>
+    <div class="plan-item">Alertas por email</div>
+    <div class="plan-item">Todas as frequências (Diário, Semanal, Quinzenal, Mensal)</div>
+    <div class="plan-item">Monitora tudo: regime, status, endereço, sócios</div>
+  </div>
+  <div class="plan-card gold">
+    <div class="plan-name">∞ Personalizado</div>
+    <div class="plan-price" style="color:#d97706;">Sob consulta</div>
+    <div class="plan-item">Ilimitado em tudo</div>
+    <div class="plan-item">Acesso por código exclusivo</div>
+    <div class="plan-item">Gerado pelo Admin</div>
+    <div class="plan-item">Pode ter validade ou ser vitalício</div>
+    <div style="margin-top:8px;font-size:8px;color:#d97706;font-style:italic;">Admin tem automaticamente</div>
+  </div>
+</div>
+
+<h2>3.2 Trial de 7 dias</h2>
+<p>Todo novo usuário recebe automaticamente <strong>7 dias do plano Starter</strong> ao criar a conta, sem necessidade de cartão de crédito. O processo é:</p>
+<div class="flow-steps">
+  <div class="flow-step"><div class="flow-step-num">1</div><span class="flow-step-title">Usuário cria conta</span><span class="flow-step-desc">Email + senha no /login</span></div>
+  <div class="flow-step"><div class="flow-step-num">2</div><span class="flow-step-title">Trigger dispara</span><span class="flow-step-desc">on_new_user_trial() no PostgreSQL</span></div>
+  <div class="flow-step"><div class="flow-step-num">3</div><span class="flow-step-title">Plano ativado</span><span class="flow-step-desc">Starter por 7 dias na user_plans</span></div>
+  <div class="flow-step"><div class="flow-step-num">4</div><span class="flow-step-title">Banner exibido</span><span class="flow-step-desc">Dias restantes no topo do app</span></div>
+  <div class="flow-step"><div class="flow-step-num">5</div><span class="flow-step-title">Trial expira</span><span class="flow-step-desc">pg_cron rebaixa para Free</span></div>
+</div>
+<ul>
+  <li>Banner <strong>amarelo</strong> quando restam mais de 1 dia</li>
+  <li>Banner <strong>vermelho</strong> quando resta 0–1 dia</li>
+  <li>A função <code>check_trial_expiry()</code> roda diariamente via pg_cron e rebaixa automaticamente para Free</li>
+</ul>
+
+<h2>3.3 Contagem de Uso</h2>
+<p>O uso é contado por ação na tabela <code>usage_logs</code>. Cada mês começa zerado. As ações rastreadas:</p>
+<table>
+  <tr><th>Ação</th><th>Quando é contada</th><th>Quem conta</th></tr>
+  <tr><td><code>consulta_cnpj</code></td><td>Cada CNPJ consultado com sucesso (não conta erros, não conta cache)</td><td>Edge Function consulta-cnpj</td></tr>
+  <tr><td><code>pdf_gerado</code></td><td>Cada PDF individual gerado</td><td>PDFReportButton component</td></tr>
+  <tr><td><code>export_lote</code></td><td>Cada export CSV/XLSX/PDF em lote</td><td>Componentes Consulta e Monitoramento</td></tr>
+</table>
+
+<h2>3.4 Cache de 24 horas</h2>
+<p>Quando um CNPJ é consultado, o sistema verifica se já existe registro com <code>last_checked_at</code> nas últimas 24 horas. Se existir, retorna o dado do banco sem chamar APIs externas (<code>status: "cached"</code>). O parâmetro <code>force: true</code> ignora o cache — usado na re-verificação manual do Monitoramento.</p>
+
+<h2>3.5 Detecção de Mudanças</h2>
+<p>Campos rastreados comparados a cada consulta:</p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:8px 0;">
+  <span class="badge badge-purple">razao_social</span>
+  <span class="badge badge-purple">simples_nacional</span>
+  <span class="badge badge-purple">regime_tributario</span>
+  <span class="badge badge-purple">status_cadastral</span>
+  <span class="badge badge-purple">data_inicio_regime</span>
+</div>
+<p>Quando há diferença entre o valor anterior e o novo, o sistema grava em <code>company_changes</code> com valor antigo, novo e timestamp.</p>
+
+<h2>3.6 Pagamento via Mercado Pago</h2>
+<div class="info-box">O cartão do usuário <strong>nunca toca no sistema</strong> — fica 100% no Mercado Pago. CNPJTrack apenas cria a preferência e recebe a confirmação via webhook.</div>
+<div class="flow-steps">
+  <div class="flow-step"><div class="flow-step-num">1</div><span class="flow-step-title">Usuário clica "Assinar"</span><span class="flow-step-desc">Na página /planos</span></div>
+  <div class="flow-step"><div class="flow-step-num">2</div><span class="flow-step-title">Edge Function</span><span class="flow-step-desc">mp-create-preference cria preferência no MP</span></div>
+  <div class="flow-step"><div class="flow-step-num">3</div><span class="flow-step-title">Redirecionamento</span><span class="flow-step-desc">Usuário vai para checkout do MP</span></div>
+  <div class="flow-step"><div class="flow-step-num">4</div><span class="flow-step-title">Pagamento feito</span><span class="flow-step-desc">No ambiente seguro do MP</span></div>
+  <div class="flow-step"><div class="flow-step-num">5</div><span class="flow-step-title">Webhook</span><span class="flow-step-desc">mp-webhook ativa o plano por 30 dias</span></div>
+</div>
+
+<h2>3.7 Acesso Admin</h2>
+<p>O email <code>carloshen.senai@gmail.com</code> é o único administrador do sistema com:</p>
+<ul>
+  <li>Plano Personalizado permanente (ilimitado em tudo)</li>
+  <li>Link "Admin" exclusivo no menu lateral</li>
+  <li>Acesso ao painel de geração de códigos e lista de usuários</li>
+  <li>Verificação dupla: client-side (Navigate redirect) e server-side (SECURITY DEFINER no banco)</li>
+</ul>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1>4. Rotas e Páginas</h1>
+
+<table>
+  <tr><th>Rota</th><th>Arquivo</th><th>Acesso</th><th>Função principal</th></tr>
+  <tr><td><code>/</code></td><td>Index.tsx</td><td>Público</td><td>Landing page de captação</td></tr>
+  <tr><td><code>/login</code></td><td>Login.tsx</td><td>Público</td><td>Login e cadastro</td></tr>
+  <tr><td><code>/dashboard</code></td><td>Dashboard.tsx</td><td>Autenticado</td><td>KPIs + gráficos + últimas alterações</td></tr>
+  <tr><td><code>/consulta</code></td><td>Consulta.tsx</td><td>Autenticado</td><td>Consultar CNPJs (lote, upload, individual)</td></tr>
+  <tr><td><code>/monitoramento</code></td><td>Monitoramento.tsx</td><td>Autenticado</td><td>Gerenciar CNPJs monitorados</td></tr>
+  <tr><td><code>/alertas</code></td><td>Alertas.tsx</td><td>Autenticado</td><td>Central de notificações de mudanças</td></tr>
+  <tr><td><code>/historico</code></td><td>Historico.tsx</td><td>Autenticado</td><td>Log completo de alterações detectadas</td></tr>
+  <tr><td><code>/planos</code></td><td>Planos.tsx</td><td>Autenticado</td><td>Uso atual, planos e assinatura</td></tr>
+  <tr><td><code>/admin</code></td><td>Admin.tsx</td><td>Só Admin</td><td>Gerar códigos, ver usuários</td></tr>
+</table>
+
+<h2>Landing Page — /</h2>
+<p>Página pública de captação com hero "Pare de verificar CNPJ manualmente", seção de dores x soluções, 4 passos de como funciona, grid de 6 funcionalidades, cards de planos Starter/Pro com preços, depoimentos e CTA final com 7 dias grátis.</p>
+
+<h2>Login/Cadastro — /login</h2>
+<p>Duas abas: <strong>Entrar</strong> (email + senha) e <strong>Criar conta</strong> (nome completo obrigatório + nome do escritório opcional + email + senha mín. 6 chars). Botão "← Voltar ao início" leva para a landing. CTA "Criar conta grátis →" com nota "7 dias grátis · Sem cartão de crédito".</p>
+
+<h2>Shell — AppLayout</h2>
+<p>Layout que envolve todas as páginas autenticadas. Sidebar esquerda fixa com navegação. Redireciona para /login se não autenticado. Badge vermelho com contagem de alertas não lidos. Banner de trial no topo com dias restantes.</p>
+
+<h2>Dashboard — /dashboard</h2>
+<p><strong>6 KPIs:</strong> Total monitorados | Ativas (com %) | Baixadas | Alterações no mês | Entradas no Simples | Saídas do Simples. <strong>Gráfico de barras</strong> por regime tributário. <strong>Gráfico de pizza</strong> por status cadastral. <strong>Tabela das últimas 10 alterações</strong> com antes/depois.</p>
+
+<h2>Consulta — /consulta</h2>
+<p><strong>3 modos de entrada:</strong></p>
+<ul>
+  <li><strong>Colar lista</strong> — textarea com CNPJs separados por qualquer delimitador. Valida dígitos verificadores em tempo real, exibe contagem válidos/inválidos.</li>
+  <li><strong>Upload de arquivo</strong> — aceita .xlsx, .xls e .csv. Detecta automaticamente a coluna com "cnpj" no nome. Prévia de 5 linhas antes de confirmar.</li>
+  <li><strong>CNPJ individual</strong> — campo com máscara automática e validação de dígitos verificadores.</li>
+</ul>
+<p>Divide em lotes de 100, processa em paralelo, atualiza a tabela de resultados incrementalmente. Após consulta: Exportar XLSX, PDF em lote, PDF individual por linha. Linhas com mudanças ficam em amarelo; erros em vermelho.</p>
+
+<h2>Monitoramento — /monitoramento</h2>
+<p><strong>Filtros:</strong> Busca por CNPJ/razão social, regime, status, tag, favoritos. <strong>Tags:</strong> cria com cor aleatória, aplica/remove por empresa, exclui globalmente. <strong>Frequência por empresa:</strong> opções dependem do plano (Free/Starter: Mensal+Quinzenal; Pro: todas). <strong>Ações em lote:</strong> checkbox, re-verificar forçado, remover com confirmação, exportar CSV/XLSX/PDF. <strong>Por linha:</strong> favorito (estrela), PDF individual, remover.</p>
+
+<h2>Alertas — /alertas</h2>
+<p>Últimos 50 alertas ordenados do mais recente. Tipos: Mudança de Status, Entrada/Saída do Simples, Mudança de CNAE/Endereço/Sócios/Regime, Empresa Baixada. Alertas não lidos têm fundo azul e ícone pulsante. Marcar individual ou "Marcar todos como lidos".</p>
+
+<h2>Histórico — /historico</h2>
+<p>Últimos 200 registros de mudanças. Filtro por texto (CNPJ, razão social ou campo). Tabela com valor anterior riscado e valor novo em azul.</p>
+
+<h2>Planos — /planos</h2>
+<p>Barras de progresso de consumo (CNPJs consultados, monitorados, PDFs, exports). Fica vermelho após 80%. Cards Free/Starter/Pro com botão "Assinar" que redireciona para Mercado Pago. Card Personalizado com input de código de acesso.</p>
+
+<h2>Admin — /admin</h2>
+<p>Acesso restrito ao email do administrador. Stats rápidos (usuários, códigos gerados/usados/disponíveis). Gerador de códigos com seletor de plano e validade opcional. Aba Códigos (tabela com status visual). Aba Usuários (plano, consumo mensal, data de cadastro).</p>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1>5. Edge Functions (Backend Serverless)</h1>
+
+<h2>consulta-cnpj</h2>
+<p>Principal função do sistema. Recebe array de até 100 CNPJs e processa cada um:</p>
+<ol>
+  <li>Verifica autenticação (token Bearer obrigatório)</li>
+  <li>Verifica cache de 24h no banco para cada CNPJ</li>
+  <li>Se sem cache: chama <strong>BrasilAPI</strong> (timeout 8s, 2 tentativas)</li>
+  <li>Se BrasilAPI falhar: chama <strong>ReceitaWS</strong> como fallback (2 tentativas)</li>
+  <li>Detecta mudanças comparando 5 campos com o registro anterior</li>
+  <li>Salva/atualiza no banco com <code>user_id</code></li>
+  <li>Grava mudanças em <code>company_changes</code></li>
+  <li>Registra <code>usage_logs</code> com quantidade de consultas bem-sucedidas</li>
+  <li>Retorna <code>results[]</code> + <code>summary</code></li>
+</ol>
+<p><strong>Normalização:</strong> Status mapeia textos da Receita para 5 valores padronizados. Regime deriva de porte + flag MEI + flag Simples.</p>
+
+<h2>mp-create-preference</h2>
+<p>Cria preferência de pagamento no Mercado Pago. Valida autenticação, valida plano (Starter ou Pro), busca <code>plan_id</code> no banco, cria preferência com item/payer/URLs de retorno/webhook URL, salva subscription <code>pending</code>, retorna <code>init_point</code>.</p>
+
+<h2>mp-webhook</h2>
+<p>Recebe notificações do Mercado Pago. GET retorna 200 (verificação). POST: busca dados do pagamento na API do MP; se <code>approved</code>, extrai <code>userId|plan_name</code> do <code>external_reference</code> e ativa o plano por 30 dias via upsert em <code>user_plans</code>.</p>
+
+<div class="info-box"><strong>Segurança das Edge Functions:</strong> CORS por allowlist de origens, Bearer token obrigatório, verificação de usuário no Supabase antes de processar qualquer dado, origens não autorizadas recebem HTTP 403.</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<h1>6. Banco de Dados</h1>
+
+<h2>Tabelas</h2>
+<table>
+  <tr><th>Tabela</th><th>Descrição</th><th>RLS</th></tr>
+  <tr><td><code>cnpjs</code></td><td>Dados dos CNPJs consultados, vinculados ao user_id</td><td>user_id = auth.uid()</td></tr>
+  <tr><td><code>company_changes</code></td><td>Histórico de cada campo alterado detectado</td><td>via company_id → cnpjs</td></tr>
+  <tr><td><code>tags</code></td><td>Tags criadas pelo usuário com nome e cor</td><td>user_id = auth.uid()</td></tr>
+  <tr><td><code>company_tags</code></td><td>Relação N:N entre empresas e tags</td><td>via company_id → cnpjs</td></tr>
+  <tr><td><code>favorites</code></td><td>CNPJs marcados como favorito</td><td>user_id = auth.uid()</td></tr>
+  <tr><td><code>monitor_settings</code></td><td>Frequência de monitoramento por empresa</td><td>via company_id → cnpjs</td></tr>
+  <tr><td><code>alerts</code></td><td>Alertas gerados por mudanças detectadas</td><td>user_id = auth.uid()</td></tr>
+  <tr><td><code>usage_logs</code></td><td>Log de ações para controle de cota mensal</td><td>user_id = auth.uid()</td></tr>
+  <tr><td><code>plans</code></td><td>Definição dos planos com todos os limites</td><td>Leitura pública</td></tr>
+  <tr><td><code>user_plans</code></td><td>Plano ativo de cada usuário + datas + flag trial</td><td>user_id = auth.uid()</td></tr>
+  <tr><td><code>access_codes</code></td><td>Códigos gerados pelo admin para ativar planos</td><td>Admin SECURITY DEFINER</td></tr>
+  <tr><td><code>subscriptions</code></td><td>Registro de transações do Mercado Pago</td><td>user_id = auth.uid()</td></tr>
+</table>
+
+<h2>Funções RPC</h2>
+<table>
+  <tr><th>Função</th><th>Quem chama</th><th>O que faz</th></tr>
+  <tr><td><code>redeem_access_code(p_code)</code></td><td>Usuário comum</td><td>Valida e ativa código de acesso, atribui plano</td></tr>
+  <tr><td><code>admin_generate_code(p_plan_name, p_expires_days)</code></td><td>Admin</td><td>Gera código de 8 chars alfanumérico</td></tr>
+  <tr><td><code>admin_list_codes()</code></td><td>Admin</td><td>Lista todos os códigos com dados de uso</td></tr>
+  <tr><td><code>admin_list_users()</code></td><td>Admin</td><td>Lista usuários com plano e uso mensal</td></tr>
+  <tr><td><code>on_new_user_trial()</code></td><td>Trigger automático</td><td>Atribui Starter trial a todo novo usuário</td></tr>
+  <tr><td><code>check_trial_expiry()</code></td><td>pg_cron (diário)</td><td>Rebaixa trials expirados para Free</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="page-break"></div>
+<h1>7. Geração de PDF</h1>
+
+<h2>PDF Individual</h2>
+<p>Relatório A4 portrait gerado no browser com jsPDF + jspdf-autotable. Busca dados completos da BrasilAPI e histórico do banco em paralelo. Contém 7 seções:</p>
+<table>
+  <tr><th>Seção</th><th>Conteúdo</th></tr>
+  <tr><td>1. Identificação</td><td>CNPJ destacado, Razão Social, Nome Fantasia, Porte, Natureza Jurídica, Data de Abertura, Capital Social, E-mail, Telefone</td></tr>
+  <tr><td>2. Situação Tributária</td><td>Box colorido por regime, Simples Nacional (Sim/Não), MEI, datas de opção e exclusão do Simples</td></tr>
+  <tr><td>3. Localização</td><td>Endereço completo, bairro, município/UF, CEP</td></tr>
+  <tr><td>4. CNAEs</td><td>CNAE principal destacado + tabela de todos os CNAEs secundários</td></tr>
+  <tr><td>5. Quadro Societário</td><td>Tabela com sócios: nome, CPF/CNPJ, qualificação, data de entrada na sociedade</td></tr>
+  <tr><td>6. Histórico de Alterações</td><td>Últimas 20 mudanças detectadas pelo sistema com data/hora</td></tr>
+  <tr><td>7. Observações do Contador</td><td>Campo livre para anotações (ou caixa vazia no PDF para preenchimento manual)</td></tr>
+</table>
+
+<h2>PDF em Lote</h2>
+<p>Relatório A4 landscape com 4 KPIs (Total, Ativas, Baixadas, No Simples) e tabela completa de todas as empresas com status colorido por linha. Rodapé com paginação em todas as páginas. Disponível em Consulta e Monitoramento.</p>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<h1>8. Segurança</h1>
+
+<table>
+  <tr><th>Mecanismo</th><th>Onde está</th><th>O que protege</th></tr>
+  <tr><td>CORS por allowlist</td><td>Edge Functions</td><td>Bloqueia origens não autorizadas (HTTP 403)</td></tr>
+  <tr><td>Bearer token obrigatório</td><td>Edge Functions</td><td>Rejeita requests sem autenticação (HTTP 401)</td></tr>
+  <tr><td>Row Level Security (RLS)</td><td>Todas as tabelas no banco</td><td>Usuário só vê seus próprios dados</td></tr>
+  <tr><td>SECURITY DEFINER + verificação de email</td><td>Funções de admin no banco</td><td>Admin verificado no servidor, não só no client</td></tr>
+  <tr><td>Redirecionamento client-side</td><td>Admin.tsx</td><td>Segunda camada de proteção da rota /admin</td></tr>
+  <tr><td>Cartão nunca no sistema</td><td>Fluxo de pagamento</td><td>Dados de pagamento ficam 100% no Mercado Pago</td></tr>
+  <tr><td>CSP / HSTS / X-Frame-Options</td><td>vercel.json</td><td>Headers de segurança HTTP no deploy</td></tr>
+  <tr><td>.env nunca commitado</td><td>Regra do projeto</td><td>Segredos nunca expostos no repositório</td></tr>
+</table>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<h1>9. Status de Implementação</h1>
+
+<div class="status-grid">
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Landing page</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Login / Cadastro</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Sistema de planos</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Trial 7 dias</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Dashboard com gráficos</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Consulta em lote</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Upload XLSX/CSV</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Detecção de mudanças</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Cache 24h</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">PDF individual (7 seções)</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">PDF em lote</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Export CSV / XLSX</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Sistema de tags</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Favoritos</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Central de alertas</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Histórico de alterações</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Painel Admin</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Gerador de códigos</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Mercado Pago (create-preference)</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Mercado Pago (webhook)</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">RLS + segurança banco</span></div>
+  <div class="status-item status-done"><span class="status-icon">✅</span><span class="status-label">Frequência por empresa</span></div>
+  <div class="status-item status-pending"><span class="status-icon">⏳</span><span class="status-label">pg_cron configurado</span></div>
+  <div class="status-item status-pending"><span class="status-icon">⏳</span><span class="status-label">Teste MP end-to-end</span></div>
+  <div class="status-item status-todo"><span class="status-icon">○</span><span class="status-label">Monitoramento automático agendado</span></div>
+  <div class="status-item status-todo"><span class="status-icon">○</span><span class="status-label">Email de alerta (Resend)</span></div>
+</div>
+
+</div>
+
+<div class="footer">
+  CNPJTrack — Plataforma de Monitoramento Fiscal &nbsp;·&nbsp;
+  Gerado em junho de 2026 &nbsp;·&nbsp;
+  carloshen.senai@gmail.com
+</div>
+
+</body>
+</html>
