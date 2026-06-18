@@ -3,10 +3,11 @@ import { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useAlerts } from "@/hooks/useAlerts";
 import { usePlan } from "@/hooks/usePlan";
+import { useTheme } from "@/hooks/useTheme";
 import { supabase } from "@/integrations/supabase/client";
 import {
   LayoutDashboard, Search, Activity, LogOut, TerminalSquare,
-  Bell, History, CreditCard, Shield, Clock,
+  Bell, History, CreditCard, Shield, Clock, Sun, Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ export default function AppLayout() {
   const { user, loading } = useAuth();
   const { unread } = useAlerts();
   const { usage } = usePlan();
+  const { theme, toggle } = useTheme();
   const nav = useNavigate();
 
   useEffect(() => {
@@ -90,15 +92,26 @@ export default function AppLayout() {
           <div className="font-mono text-[10px] text-muted-foreground truncate" title={user.email ?? ""}>
             {user.email}
           </div>
-          <Button
-            onClick={handleSignOut}
-            variant="ghost"
-            size="sm"
-            className="w-full justify-start text-muted-foreground hover:text-foreground"
-          >
-            <LogOut className="h-3.5 w-3.5 mr-2" />
-            <span className="text-xs">Sair</span>
-          </Button>
+          <div className="flex gap-1">
+            <Button
+              onClick={handleSignOut}
+              variant="ghost"
+              size="sm"
+              className="flex-1 justify-start text-muted-foreground hover:text-foreground"
+            >
+              <LogOut className="h-3.5 w-3.5 mr-2" />
+              <span className="text-xs">Sair</span>
+            </Button>
+            <Button
+              onClick={toggle}
+              variant="ghost"
+              size="sm"
+              className="px-2 text-muted-foreground hover:text-foreground"
+              title={theme === "dark" ? "Modo claro" : "Modo escuro"}
+            >
+              {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+            </Button>
+          </div>
         </div>
       </aside>
       <main className="flex-1 min-w-0 overflow-auto flex flex-col">

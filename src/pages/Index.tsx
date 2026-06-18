@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import {
   TerminalSquare, ArrowRight, Check, X, Search, Activity, Bell,
   FileText, TrendingUp, Shield, BarChart2, Upload, Clock,
-  CheckCircle2, AlertTriangle, ChevronDown,
+  CheckCircle2, AlertTriangle, ChevronDown, Sun, Moon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useTheme } from "@/hooks/useTheme";
 
 // ─── dados estáticos ───────────────────────────────────────────────────────
 
@@ -206,52 +207,64 @@ function FAQ({ q, a }: { q: string; a: string }) {
 // ─── página ─────────────────────────────────────────────────────────────────
 
 export default function Index() {
+  const { theme, toggle } = useTheme();
+
   return (
     <div className="min-h-screen bg-background text-foreground font-mono">
 
       {/* ── HEADER ── */}
-      <header className="border-b border-border/50 px-6 py-4 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-10">
+      <header className="border-b border-border/50 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-10">
         <div className="flex items-center gap-2">
           <TerminalSquare className="h-5 w-5 text-primary" />
           <span className="text-sm font-semibold tracking-tight">CNPJTrack</span>
-          <span className="hidden sm:block text-[10px] text-muted-foreground uppercase tracking-widest ml-1">monitoramento fiscal</span>
+          <span className="hidden lg:block text-[10px] text-muted-foreground uppercase tracking-widest ml-1">monitoramento fiscal</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggle}
+            className="p-2 rounded-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
+            title={theme === "dark" ? "Modo claro" : "Modo escuro"}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <Link to="/login">
-            <Button variant="ghost" size="sm" className="font-mono text-xs">Entrar</Button>
+            <Button variant="ghost" size="sm" className="font-mono text-xs hidden sm:inline-flex">Entrar</Button>
           </Link>
           <Link to="/login">
-            <Button size="sm" className="font-mono text-xs uppercase bg-primary hover:bg-primary-glow">
-              7 dias grátis <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+            <Button size="sm" className="font-mono text-xs uppercase bg-primary hover:bg-primary-glow text-primary-foreground">
+              <span className="hidden sm:inline">Testar grátis</span>
+              <span className="sm:hidden">Testar</span>
+              <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
             </Button>
           </Link>
         </div>
       </header>
 
       {/* ── HERO ── */}
-      <section className="max-w-4xl mx-auto px-6 pt-20 pb-16 text-center">
-        <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest mb-8">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 pt-14 sm:pt-20 pb-12 sm:pb-16 text-center">
+        <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 text-primary px-3 sm:px-4 py-1.5 rounded-full text-[10px] uppercase tracking-widest mb-6 sm:mb-8">
           <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-          Para contadores e escritórios de contabilidade
+          <span className="hidden sm:inline">Para contadores e escritórios de contabilidade</span>
+          <span className="sm:hidden">Para contadores</span>
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-5 sm:mb-6">
           Pare de perder horas<br />
           <span className="text-primary">verificando CNPJs</span><br />
           manualmente.
         </h1>
 
-        <p className="text-muted-foreground text-base md:text-lg max-w-2xl mx-auto mb-3 leading-relaxed">
+        <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto mb-3 leading-relaxed px-2">
           Monitore toda a carteira dos seus clientes automaticamente e seja avisado sempre que houver qualquer alteração fiscal, cadastral ou tributária.
         </p>
 
-        <p className="text-muted-foreground/70 text-sm mb-10">
+        <p className="text-muted-foreground/70 text-xs sm:text-sm mb-8 sm:mb-10 px-4">
           Sem consultar empresa por empresa. Sem planilhas. Sem esquecer nenhum cliente.
         </p>
 
         <Link to="/login">
-          <Button size="lg" className="font-mono text-sm uppercase px-10 bg-primary hover:bg-primary-glow shadow-lg shadow-primary/20">
-            Quero testar gratuitamente por 7 dias <ArrowRight className="h-4 w-4 ml-2" />
+          <Button size="lg" className="font-mono text-xs sm:text-sm uppercase px-6 sm:px-10 bg-primary hover:bg-primary-glow text-primary-foreground shadow-lg shadow-primary/20 w-full sm:w-auto">
+            Testar gratuitamente por 7 dias <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </Link>
         <p className="text-muted-foreground/60 text-xs mt-4">
@@ -260,10 +273,10 @@ export default function Index() {
       </section>
 
       {/* ── IDENTIFICAÇÃO ── */}
-      <section className="bg-background-deep/40 border-y border-border/50 py-16">
-        <div className="max-w-3xl mx-auto px-6">
+      <section className="bg-background-deep/40 border-y border-border/50 py-12 sm:py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-4 text-center">Você se identifica?</div>
-          <h2 className="text-2xl font-bold text-center mb-10">
+          <h2 className="text-xl sm:text-2xl font-bold text-center mb-8 sm:mb-10">
             Se hoje você administra dezenas ou centenas de CNPJs...
           </h2>
 
@@ -287,7 +300,7 @@ export default function Index() {
 
           <div className="space-y-4 text-center">
             <p className="text-sm text-muted-foreground leading-relaxed">Enquanto isso...</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
               {[
                 { icon: AlertTriangle, label: "Uma alteração no Simples Nacional", color: "text-warning" },
                 { icon: AlertTriangle, label: "Uma mudança de regime tributário", color: "text-warning" },
@@ -308,17 +321,17 @@ export default function Index() {
       </section>
 
       {/* ── COMO FUNCIONA ── */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-12">
+      <section className="py-14 sm:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-12">
             <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-3">Como funciona</div>
-            <h2 className="text-2xl font-bold mb-3">
+            <h2 className="text-xl sm:text-2xl font-bold mb-3">
               O CNPJTrack transforma horas de conferência manual em poucos segundos.
             </h2>
             <p className="text-muted-foreground text-sm">Basta:</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
             {STEPS.map(({ n, title, desc }) => (
               <div key={n} className="terminal-card p-6 flex gap-4">
                 <div className="flex-shrink-0 h-9 w-9 rounded-sm bg-primary/10 border border-primary/30 flex items-center justify-center font-mono text-primary font-bold text-lg">
@@ -363,13 +376,13 @@ export default function Index() {
       </section>
 
       {/* ── ANTES X DEPOIS ── */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-12">
+      <section className="py-14 sm:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-12">
             <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-3">Transformação</div>
-            <h2 className="text-2xl font-bold">Antes x Depois do CNPJTrack</h2>
+            <h2 className="text-xl sm:text-2xl font-bold">Antes x Depois do CNPJTrack</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
             <div className="terminal-card p-6 border-destructive/30 border-2">
               <div className="flex items-center gap-2 mb-5">
                 <X className="h-4 w-4 text-destructive" />
@@ -458,15 +471,15 @@ export default function Index() {
       </section>
 
       {/* ── PLANOS ── */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-6">
-          <div className="text-center mb-12">
+      <section className="py-14 sm:py-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-10 sm:mb-12">
             <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-3">Planos</div>
-            <h2 className="text-2xl font-bold">Escolha o plano ideal para o seu escritório</h2>
+            <h2 className="text-xl sm:text-2xl font-bold">Escolha o plano ideal para o seu escritório</h2>
             <p className="text-muted-foreground text-sm mt-2">7 dias grátis em qualquer plano · Sem cartão de crédito · Cancele quando quiser</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 max-w-3xl mx-auto">
             {/* Starter */}
             <div className="terminal-card p-7 flex flex-col gap-5 border-2 border-primary/40">
               <div>
@@ -488,7 +501,7 @@ export default function Index() {
               </ul>
               <Link to="/login">
                 <Button variant="outline" className="w-full font-mono text-xs uppercase">
-                  Começar trial grátis <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                  Testar gratuitamente <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                 </Button>
               </Link>
             </div>
@@ -517,7 +530,7 @@ export default function Index() {
               </ul>
               <Link to="/login">
                 <Button className="w-full font-mono text-xs uppercase bg-primary hover:bg-primary-glow">
-                  Começar trial grátis <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                  Testar gratuitamente <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                 </Button>
               </Link>
             </div>
@@ -582,21 +595,21 @@ export default function Index() {
       </section>
 
       {/* ── CTA FINAL ── */}
-      <section className="py-24">
-        <div className="max-w-2xl mx-auto px-6 text-center">
+      <section className="py-16 sm:py-24">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 text-center">
           <div className="text-[10px] text-muted-foreground uppercase tracking-widest mb-6">Pronto para começar?</div>
-          <h2 className="text-3xl font-bold mb-4 leading-tight">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4 leading-tight">
             Pare de desperdiçar horas fazendo conferências manuais.
           </h2>
           <p className="text-muted-foreground text-sm leading-relaxed mb-2 max-w-xl mx-auto">
             Deixe que o CNPJTrack monitore toda a sua carteira automaticamente enquanto você foca no que realmente gera valor para seus clientes.
           </p>
-          <p className="text-muted-foreground/60 text-xs mb-10">
+          <p className="text-muted-foreground/60 text-xs mb-8 sm:mb-10 px-2">
             De contador que passa horas conferindo CNPJs manualmente para um escritório que monitora centenas de empresas automaticamente e é avisado apenas quando algo realmente muda.
           </p>
           <Link to="/login">
-            <Button size="lg" className="font-mono text-sm uppercase px-10 bg-primary hover:bg-primary-glow shadow-lg shadow-primary/20">
-              Quero começar meu teste gratuito agora <ArrowRight className="h-4 w-4 ml-2" />
+            <Button size="lg" className="font-mono text-xs sm:text-sm uppercase px-6 sm:px-10 bg-primary hover:bg-primary-glow text-primary-foreground shadow-lg shadow-primary/20 w-full sm:w-auto">
+              Testar grátis agora <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </Link>
           <p className="text-muted-foreground/60 text-xs mt-4">
