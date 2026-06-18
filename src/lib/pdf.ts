@@ -141,16 +141,41 @@ export async function gerarRelatorioIndividual(
   doc.setFillColor(...PRIMARY);
   doc.rect(0, 0, pageW, 28, "F");
 
+  // Hexágono logo
+  const hx = margin, hy = 4, hs = 10;
+  const hexPts = Array.from({ length: 6 }, (_, i) => {
+    const angle = (Math.PI / 180) * (60 * i - 30);
+    return [hx + hs * Math.cos(angle), hy + hs * Math.sin(angle)] as [number, number];
+  });
+  doc.setFillColor(99, 102, 241);
+  doc.setDrawColor(99, 102, 241);
+  (doc as any).polygon(hexPts.map(([x, y]) => ({ x, y })), "F");
+  // Letra C
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(16);
+  doc.setFontSize(9);
   doc.setTextColor(...WHITE);
-  doc.text("CNPJ Brasil Track", margin, 11);
+  doc.text("C", hx - 1.5, hy + 3.2);
+  // Check verde
+  doc.setDrawColor(16, 185, 129);
+  doc.setLineWidth(0.9);
+  doc.line(hx + 1, hy + 2.5, hx + 3, hy + 5);
+  doc.line(hx + 3, hy + 5, hx + 7.5, hy - 1);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(15);
+  doc.setTextColor(...WHITE);
+  doc.text("CNPJ ", margin + hs * 2 + 2, 11);
+  const cnpjW = doc.getTextWidth("CNPJ ");
+  doc.setTextColor(16, 185, 129);
+  doc.text("Brasil", margin + hs * 2 + 2 + cnpjW, 11);
+  const brasilW = doc.getTextWidth("Brasil");
+  doc.setTextColor(140, 130, 245);
+  doc.text(" Track", margin + hs * 2 + 2 + cnpjW + brasilW, 11);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(180, 180, 200);
-  doc.text("Plataforma de Monitoramento Fiscal", margin, 17);
-  doc.text("terminal fiscal", margin, 22);
+  doc.text("Plataforma de Monitoramento Fiscal", margin + hs * 2 + 2, 17);
 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
@@ -537,13 +562,33 @@ export async function gerarRelatorioLote(
   const WHITE: [number, number, number] = [255, 255, 255];
   const LIGHT_BG: [number, number, number] = [248, 250, 252];
 
-  // Cabeçalho
+  // Cabeçalho lote
   doc.setFillColor(...PRIMARY);
   doc.rect(0, 0, pageW, 22, "F");
-  doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(...WHITE);
-  doc.text("CNPJ Brasil Track", margin, 9);
+  // Mini hexágono
+  const lhx = margin + 5, lhy = 6, lhs = 6;
+  const lhexPts = Array.from({ length: 6 }, (_, i) => {
+    const angle = (Math.PI / 180) * (60 * i - 30);
+    return { x: lhx + lhs * Math.cos(angle), y: lhy + lhs * Math.sin(angle) };
+  });
+  doc.setFillColor(99, 102, 241);
+  (doc as any).polygon(lhexPts, "F");
+  doc.setFont("helvetica", "bold"); doc.setFontSize(7); doc.setTextColor(...WHITE);
+  doc.text("C", lhx - 1, lhy + 2.2);
+  doc.setDrawColor(16, 185, 129); doc.setLineWidth(0.6);
+  doc.line(lhx + 0.5, lhy + 1.5, lhx + 2, lhy + 3.5);
+  doc.line(lhx + 2, lhy + 3.5, lhx + 5, lhy - 0.5);
+  // Nome colorido
+  doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(...WHITE);
+  doc.text("CNPJ ", margin + lhs * 2 + 2, 9);
+  const lw1 = doc.getTextWidth("CNPJ ");
+  doc.setTextColor(16, 185, 129);
+  doc.text("Brasil", margin + lhs * 2 + 2 + lw1, 9);
+  const lw2 = doc.getTextWidth("Brasil");
+  doc.setTextColor(140, 130, 245);
+  doc.text(" Track", margin + lhs * 2 + 2 + lw1 + lw2, 9);
   doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(180, 180, 200);
-  doc.text("Plataforma de Monitoramento Fiscal", margin, 15);
+  doc.text("Plataforma de Monitoramento Fiscal", margin + lhs * 2 + 2, 15);
   doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(...WHITE);
   doc.text("RELATÓRIO DE MONITORAMENTO EM LOTE", pageW - margin, 9, { align: "right" });
   doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(180, 180, 200);
