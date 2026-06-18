@@ -154,6 +154,15 @@ export default function Monitoramento() {
     }
   };
 
+  const deleteTag = async (tagId: string, tagName: string) => {
+    if (!confirm(`Apagar a tag "${tagName}"? Ela será removida de todas as empresas.`)) return;
+    const { error } = await supabase.from("tags").delete().eq("id", tagId);
+    if (error) { toast.error(error.message); return; }
+    setTags((prev) => prev.filter((t) => t.id !== tagId));
+    setRows((prev) => prev.map((r) => ({ ...r, tags: r.tags?.filter((t) => t.id !== tagId) || [] })));
+    toast.success(`Tag "${tagName}" apagada.`);
+  };
+
   const createTag = async () => {
     const name = newTagName.trim();
     if (!name) return;
@@ -322,8 +331,11 @@ export default function Monitoramento() {
           <Tag className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">Tags:</span>
           {tags.map((tag) => (
-            <span key={tag.id} className="font-mono text-[10px] px-2 py-0.5 rounded-full border" style={{ borderColor: tag.color, color: tag.color }}>
+            <span key={tag.id} className="font-mono text-[10px] px-2 py-0.5 rounded-full border flex items-center gap-1" style={{ borderColor: tag.color, color: tag.color }}>
               {tag.name}
+              <button onClick={() => deleteTag(tag.id, tag.name)} title="Apagar tag" className="opacity-50 hover:opacity-100 transition-opacity">
+                <X className="h-2.5 w-2.5" />
+              </button>
             </span>
           ))}
           {showTagInput ? (
