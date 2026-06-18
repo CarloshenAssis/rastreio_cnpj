@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AlertCircle, ArrowLeft, Star, Rocket, Loader2 } from "lucide-react";
-import { Logo } from "@/components/Logo";
+import { LogoFull } from "@/components/Logo";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -128,14 +128,8 @@ export default function Login() {
         </div>
 
         {/* Logo */}
-        <div className="flex items-center gap-2 mb-6 justify-center">
-          <Logo className="h-10 w-10" />
-          <div>
-            <div className="font-mono text-xl font-semibold">CNPJ Brasil Track</div>
-            <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">
-              monitoramento fiscal de CNPJs
-            </div>
-          </div>
+        <div className="flex justify-center mb-6">
+          <LogoFull iconClass="h-12 w-12" textClass="text-xl" />
         </div>
 
         {/* Banner do plano selecionado */}

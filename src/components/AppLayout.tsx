@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAlerts } from "@/hooks/useAlerts";
 import { usePlan } from "@/hooks/usePlan";
 import { useTheme } from "@/hooks/useTheme";
-import { Logo } from "@/components/Logo";
+import { Logo, LogoFull } from "@/components/Logo";
 import { supabase } from "@/integrations/supabase/client";
 import {
   LayoutDashboard, Search, Activity, LogOut,
@@ -55,11 +55,7 @@ export default function AppLayout() {
   const SidebarContent = ({ onNavClick }: { onNavClick?: () => void }) => (
     <>
       <div className="px-4 py-5 border-b border-sidebar-border flex items-center gap-2">
-        <Logo className="h-8 w-8" />
-        <div>
-          <div className="font-mono text-sm font-semibold tracking-tight">CNPJ Brasil Track</div>
-          <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest">monitoramento fiscal</div>
-        </div>
+        <LogoFull iconClass="h-8 w-8" textClass="text-sm" />
       </div>
       <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto">
         {navItems.map(({ to, label, icon: Icon, badge }) => (
@@ -161,8 +157,7 @@ export default function AppLayout() {
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2">
-            <Logo className="h-6 w-6" />
-            <span className="font-mono text-sm font-semibold tracking-tight">CNPJ Brasil Track</span>
+            <LogoFull iconClass="h-7 w-7" textClass="text-sm" />
           </div>
           <Button
             onClick={toggle}

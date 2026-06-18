@@ -7,7 +7,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useTheme } from "@/hooks/useTheme";
-import { Logo } from "@/components/Logo";
+import { Logo, LogoFull } from "@/components/Logo";
 
 // ─── dados estáticos ───────────────────────────────────────────────────────
 
@@ -216,8 +216,7 @@ export default function Index() {
       {/* ── HEADER ── */}
       <header className="border-b border-border/50 px-4 sm:px-6 py-4 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-10">
         <div className="flex items-center gap-2">
-          <Logo className="h-8 w-8" />
-          <span className="text-sm font-semibold tracking-tight">CNPJ Brasil Track</span>
+          <LogoFull iconClass="h-8 w-8" textClass="text-sm" />
           <span className="hidden lg:block text-[10px] text-muted-foreground uppercase tracking-widest ml-1">monitoramento fiscal</span>
         </div>
         <div className="flex items-center gap-2">
