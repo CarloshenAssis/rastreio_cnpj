@@ -172,16 +172,18 @@ export async function gerarRelatorioIndividual(
 
   // ── IDENTIFICAÇÃO ──────────────────────────────────────────────────
   const sectionTitle = (title: string, yPos: number): number => {
+    // Fundo levemente colorido na linha toda
+    doc.setFillColor(238, 240, 255);
+    doc.rect(margin, yPos, contentW, 7, "F");
+    // Barra esquerda fina
     doc.setFillColor(...ACCENT);
-    doc.rect(margin, yPos, 3, 5, "F");
+    doc.rect(margin, yPos, 2, 7, "F");
+    // Texto do título completo (com número) após a barra
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
     doc.setTextColor(...ACCENT);
-    doc.text(title, margin + 5, yPos + 3.8);
-    doc.setDrawColor(...BORDER);
-    doc.setLineWidth(0.3);
-    doc.line(margin, yPos + 6.5, pageW - margin, yPos + 6.5);
-    return yPos + 10;
+    doc.text(title, margin + 5, yPos + 4.8);
+    return yPos + 11;
   };
 
   const field = (label: string, value: string, xLeft: number, xRight: number, yPos: number, cols = 1): number => {
