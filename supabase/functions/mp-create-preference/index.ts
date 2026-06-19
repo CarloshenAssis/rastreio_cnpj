@@ -20,8 +20,8 @@ function corsHeaders(origin: string | null) {
 }
 
 const PLAN_PRICES: Record<string, { title: string; amount: number; currency_id: string }> = {
-  Starter: { title: "CNPJTrack Starter", amount: 19.90, currency_id: "BRL" },
-  Pro:     { title: "CNPJTrack Pro",     amount: 44.90, currency_id: "BRL" },
+  Starter: { title: "CNPJTrack Starter", amount: 1.00, currency_id: "BRL" },
+  Pro:     { title: "CNPJTrack Pro",     amount: 1.00, currency_id: "BRL" },
 };
 
 Deno.serve(async (req) => {
@@ -106,12 +106,8 @@ Deno.serve(async (req) => {
     amount_cents: Math.round(planInfo.amount * 100),
   });
 
-  // Com token de teste (TEST-...), usa sandbox_init_point para não redirecionar para produção
-  const isTest = mpToken.startsWith("TEST-");
-  const checkoutUrl = isTest ? mpData.sandbox_init_point : mpData.init_point;
-
   return new Response(
-    JSON.stringify({ init_point: checkoutUrl }),
+    JSON.stringify({ init_point: mpData.init_point }),
     { headers: { ...cors, "Content-Type": "application/json" } }
   );
 });
