@@ -61,8 +61,8 @@ async function retry<T>(fn: () => Promise<T>, retries = 2, delayMs = 1000): Prom
 function mapPorteToRegime(porte?: string | null, simples?: boolean | null, mei?: boolean | null): NormalizedCNPJ["regime_tributario"] {
   if (mei) return "MEI";
   if (simples) return "Simples";
-  const p = (porte || "").toUpperCase();
-  if (p.includes("DEMAIS") || p.includes("GRANDE")) return "Lucro Presumido";
+  // BrasilAPI e ReceitaWS NÃO fornecem a distinção Lucro Real vs Lucro Presumido.
+  // Retornar "Indefinido" é mais honesto do que chutar "Lucro Presumido".
   return "Indefinido";
 }
 

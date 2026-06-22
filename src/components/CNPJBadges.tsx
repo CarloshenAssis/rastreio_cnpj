@@ -4,10 +4,13 @@ import { REGIME_COLORS, STATUS_COLORS } from "@/lib/cnpj";
 
 export function RegimeBadge({ regime }: { regime?: string | null }) {
   const v = regime || "Indefinido";
+  const isIndefinido = v === "Indefinido";
   return (
-    <Badge variant="outline" className={cn("font-mono text-[10px] uppercase tracking-wider rounded-sm", REGIME_COLORS[v] || REGIME_COLORS["Indefinido"])}>
-      {v}
-    </Badge>
+    <span title={isIndefinido ? "As APIs públicas (BrasilAPI/ReceitaWS) não informam Lucro Real vs Lucro Presumido. Verifique diretamente na Receita Federal." : undefined}>
+      <Badge variant="outline" className={cn("font-mono text-[10px] uppercase tracking-wider rounded-sm cursor-default", REGIME_COLORS[v] || REGIME_COLORS["Indefinido"])}>
+        {isIndefinido ? "Não informado" : v}
+      </Badge>
+    </span>
   );
 }
 
