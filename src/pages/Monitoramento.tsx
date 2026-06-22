@@ -12,7 +12,7 @@ import {
 import { PDFReportButton } from "@/components/PDFReportButton";
 import { gerarRelatorioLote } from "@/lib/pdf";
 import { formatCNPJ, formatDateTimeBR } from "@/lib/cnpj";
-import { RegimeBadge, StatusBadge, SimplesBadge } from "@/components/CNPJBadges";
+import { StatusBadge, SimplesBadge } from "@/components/CNPJBadges";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlan";
@@ -52,7 +52,6 @@ export default function Monitoramento() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [filter, setFilter] = useState("");
-  const [regimeFilter, setRegimeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [showFavOnly, setShowFavOnly] = useState(false);
   const [tagFilter, setTagFilter] = useState<string>("");
@@ -108,7 +107,6 @@ export default function Monitoramento() {
       const matchRazao = !!r.razao_social?.toLowerCase().includes(q);
       if (!matchCnpj && !matchRazao) return false;
     }
-    if (regimeFilter && r.regime_tributario !== regimeFilter) return false;
     if (statusFilter && r.status_cadastral !== statusFilter) return false;
     if (tagFilter && !r.tags?.some((t) => t.id === tagFilter)) return false;
     return true;
@@ -118,7 +116,6 @@ export default function Monitoramento() {
     const data = (selected.size ? filtered.filter((r) => selected.has(r.id)) : filtered).map((r) => ({
       CNPJ: formatCNPJ(r.cnpj),
       "Razão Social": r.razao_social || "",
-      Regime: r.regime_tributario || "",
       "Simples Nacional": r.simples_nacional === null ? "" : r.simples_nacional ? "Sim" : "Não",
       Status: r.status_cadastral || "",
       Tags: r.tags?.map((t) => t.name).join(", ") || "",
@@ -287,14 +284,6 @@ export default function Monitoramento() {
             <Search className="h-3.5 w-3.5 text-muted-foreground absolute left-2.5 top-1/2 -translate-y-1/2" />
             <Input value={filter} onChange={(e) => setFilter(e.target.value)} placeholder="Buscar por CNPJ ou razão social…" className="pl-8 font-mono text-xs h-8" />
           </div>
-          <select value={regimeFilter} onChange={(e) => setRegimeFilter(e.target.value)} className="w-full sm:w-auto bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs">
-            <option value="">Todos regimes</option>
-            <option value="MEI">MEI</option>
-            <option value="Simples">Simples</option>
-            <option value="Lucro Presumido">Lucro Presumido</option>
-            <option value="Lucro Real">Lucro Real</option>
-            <option value="Indefinido">Indefinido</option>
-          </select>
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-full sm:w-auto bg-input border border-border rounded-sm px-2 h-8 font-mono text-xs">
             <option value="">Todos status</option>
             <option value="Ativa">Ativa</option>
@@ -367,7 +356,6 @@ export default function Monitoramento() {
                   <th className="px-3 py-2.5 w-8"></th>
                   <th className="text-left px-4 py-2.5">CNPJ</th>
                   <th className="text-left px-4 py-2.5">Razão Social</th>
-                  <th className="text-left px-4 py-2.5">Regime</th>
                   <th className="text-left px-4 py-2.5">Simples</th>
                   <th className="text-left px-4 py-2.5">Status</th>
                   <th className="text-left px-4 py-2.5">Tags</th>
@@ -393,7 +381,6 @@ export default function Monitoramento() {
                     </td>
                     <td className="px-4 py-2.5 tabular-nums">{formatCNPJ(r.cnpj)}</td>
                     <td className="px-4 py-2.5 font-sans text-xs">{r.razao_social || "—"}</td>
-                    <td className="px-4 py-2.5"><RegimeBadge regime={r.regime_tributario} /></td>
                     <td className="px-4 py-2.5"><SimplesBadge simples={r.simples_nacional} /></td>
                     <td className="px-4 py-2.5"><StatusBadge status={r.status_cadastral} /></td>
                     <td className="px-4 py-2.5">

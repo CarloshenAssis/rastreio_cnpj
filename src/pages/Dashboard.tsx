@@ -3,11 +3,10 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { PageHeader, StatCard } from "@/components/Shell";
 import { Button } from "@/components/ui/button";
-import { Plus, AlertTriangle, TrendingUp, Building2, Star } from "lucide-react";
+import { Plus, AlertTriangle, Building2 } from "lucide-react";
 import { formatCNPJ, formatDateTimeBR } from "@/lib/cnpj";
-import { RegimeBadge, StatusBadge } from "@/components/CNPJBadges";
 import {
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend,
+  XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend,
 } from "recharts";
 
 interface Counts {
@@ -17,7 +16,6 @@ interface Counts {
   changedThisMonth: number;
   simplesEntry: number;
   simplesExit: number;
-  byRegime: Record<string, number>;
   byStatus: Record<string, number>;
 }
 interface RecentChange {
@@ -29,8 +27,6 @@ interface RecentChange {
   cnpjs: { cnpj: string; razao_social: string | null } | null;
 }
 
-const REGIME_ORDER = ["MEI", "Simples", "Lucro Presumido", "Lucro Real", "Indefinido"];
-const REGIME_COLORS = ["#6366f1", "#22d3ee", "#f59e0b", "#ef4444", "#64748b"];
 const STATUS_COLORS: Record<string, string> = {
   Ativa: "#22c55e",
   Suspensa: "#f59e0b",
@@ -41,9 +37,7 @@ const STATUS_COLORS: Record<string, string> = {
 const FIELD_LABELS: Record<string, string> = {
   razao_social: "Razão Social",
   simples_nacional: "Simples Nacional",
-  regime_tributario: "Regime",
   status_cadastral: "Status",
-  data_inicio_regime: "Data Início Regime",
   municipio: "Município",
   uf: "UF",
 };
@@ -51,7 +45,7 @@ const FIELD_LABELS: Record<string, string> = {
 export default function Dashboard() {
   const [counts, setCounts] = useState<Counts>({
     total: 0, ativas: 0, baixadas: 0, changedThisMonth: 0,
-    simplesEntry: 0, simplesExit: 0, byRegime: {}, byStatus: {},
+    simplesEntry: 0, simplesExit: 0, byStatus: {},
   });
   const [recent, setRecent] = useState<RecentChange[]>([]);
   const [loading, setLoading] = useState(true);
@@ -68,7 +62,7 @@ export default function Dashboard() {
         { data: recentRows },
         { data: simplesChanges },
       ] = await Promise.all([
-        supabase.from("cnpjs").select("regime_tributario, status_cadastral, simples_nacional"),
+        supabase.from("cnpjs").select("status_cadastral, simples_nacional"),
         supabase.from("company_changes").select("company_id").gte("changed_at", startOfMonth.toISOString()),
         supabase
           .from("company_changes")
@@ -82,14 +76,10 @@ export default function Dashboard() {
           .gte("changed_at", startOfMonth.toISOString()),
       ]);
 
-      const byRegime: Record<string, number> = {};
       const byStatus: Record<string, number> = {};
-      for (const r of REGIME_ORDER) byRegime[r] = 0;
 
       let ativas = 0, baixadas = 0;
       (cnpjs || []).forEach((c: any) => {
-        const k = c.regime_tributario || "Indefinido";
-        byRegime[k] = (byRegime[k] || 0) + 1;
         const s = c.status_cadastral || "Indefinido";
         byStatus[s] = (byStatus[s] || 0) + 1;
         if (s === "Ativa") ativas++;
@@ -105,18 +95,12 @@ export default function Dashboard() {
         ativas, baixadas,
         changedThisMonth: changedSet.size,
         simplesEntry, simplesExit,
-        byRegime, byStatus,
+        byStatus,
       });
       setRecent((recentRows as any) || []);
       setLoading(false);
     })();
   }, []);
-
-  const regimeChartData = REGIME_ORDER.map((r, i) => ({
-    name: r,
-    value: counts.byRegime[r] || 0,
-    fill: REGIME_COLORS[i],
-  })).filter((d) => d.value > 0);
 
   const statusChartData = Object.entries(counts.byStatus).map(([name, value]) => ({
     name, value, fill: STATUS_COLORS[name] || "#64748b",
@@ -150,35 +134,7 @@ export default function Dashboard() {
         </div>
 
         {/* Gráficos */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="terminal-card p-5">
-            <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-4 flex items-center gap-2">
-              <TrendingUp className="h-3.5 w-3.5" />
-              Distribuição por Regime
-            </div>
-            {loading || regimeChartData.length === 0 ? (
-              <div className="h-48 flex items-center justify-center font-mono text-xs text-muted-foreground">
-                {loading ? "Carregando…" : "Sem dados"}
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={180}>
-                <BarChart data={regimeChartData} margin={{ top: 4, right: 8, left: -20, bottom: 4 }}>
-                  <XAxis dataKey="name" tick={{ fontSize: 10, fontFamily: "monospace" }} />
-                  <YAxis tick={{ fontSize: 10, fontFamily: "monospace" }} allowDecimals={false} />
-                  <Tooltip
-                    contentStyle={{ background: "hsl(var(--background))", border: "1px solid hsl(var(--border))", fontFamily: "monospace", fontSize: 11 }}
-                    cursor={{ fill: "hsl(var(--muted)/0.3)" }}
-                  />
-                  <Bar dataKey="value" radius={[2, 2, 0, 0]}>
-                    {regimeChartData.map((entry, i) => (
-                      <Cell key={i} fill={entry.fill} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-
+        <div className="grid grid-cols-1 gap-4">
           <div className="terminal-card p-5">
             <div className="font-mono text-[10px] text-muted-foreground uppercase tracking-widest mb-4 flex items-center gap-2">
               <Building2 className="h-3.5 w-3.5" />

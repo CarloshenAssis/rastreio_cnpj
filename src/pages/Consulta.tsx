@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Loader2, AlertCircle, CheckCircle2, FileSpreadsheet, Upload, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { parseCNPJList, formatCNPJ, stripCNPJ, validateCNPJ, formatDateTimeBR } from "@/lib/cnpj";
-import { RegimeBadge, StatusBadge, SimplesBadge } from "@/components/CNPJBadges";
+import { StatusBadge, SimplesBadge } from "@/components/CNPJBadges";
 import { PDFReportButton } from "@/components/PDFReportButton";
 import { gerarRelatorioLote } from "@/lib/pdf";
 import { cn } from "@/lib/utils";
@@ -97,8 +97,6 @@ export default function Consulta() {
       CNPJ: formatCNPJ(r.cnpj),
       "Razão Social": r.data?.razao_social || "",
       "Simples Nacional": r.data?.simples_nacional ? "Sim" : "Não",
-      Regime: r.data?.regime_tributario || "",
-      "Data Início Regime": r.data?.data_inicio_regime || "",
       Status: r.data?.status_cadastral || "",
       Município: r.data?.municipio || "",
       UF: r.data?.uf || "",
@@ -216,7 +214,6 @@ export default function Consulta() {
                     <th className="text-left px-4 py-2.5">CNPJ</th>
                     <th className="text-left px-4 py-2.5">Razão Social</th>
                     <th className="text-left px-4 py-2.5">Simples</th>
-                    <th className="text-left px-4 py-2.5">Regime</th>
                     <th className="text-left px-4 py-2.5">Status</th>
                     <th className="text-left px-4 py-2.5">UF</th>
                     <th className="text-left px-4 py-2.5">Consultado em</th>
@@ -237,7 +234,6 @@ export default function Consulta() {
                           : (r.data?.razao_social || "—")}
                       </td>
                       <td className="px-4 py-2.5"><SimplesBadge simples={r.data?.simples_nacional}/></td>
-                      <td className="px-4 py-2.5"><RegimeBadge regime={r.data?.regime_tributario}/></td>
                       <td className="px-4 py-2.5"><StatusBadge status={r.data?.status_cadastral}/></td>
                       <td className="px-4 py-2.5 text-muted-foreground">{r.data?.uf || "—"}</td>
                       <td className="px-4 py-2.5 text-muted-foreground">{formatDateTimeBR(r.data?.last_checked_at)}</td>
