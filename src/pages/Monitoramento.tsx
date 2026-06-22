@@ -12,7 +12,7 @@ import {
 import { PDFReportButton } from "@/components/PDFReportButton";
 import { gerarRelatorioLote } from "@/lib/pdf";
 import { formatCNPJ, formatDateTimeBR } from "@/lib/cnpj";
-import { StatusBadge, SimplesBadge } from "@/components/CNPJBadges";
+import { StatusBadge, SimplesBadge, MeiBadge } from "@/components/CNPJBadges";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { usePlan } from "@/hooks/usePlan";
@@ -116,6 +116,7 @@ export default function Monitoramento() {
     const data = (selected.size ? filtered.filter((r) => selected.has(r.id)) : filtered).map((r) => ({
       CNPJ: formatCNPJ(r.cnpj),
       "Razão Social": r.razao_social || "",
+      "MEI": r.regime_tributario === "MEI" ? "Sim" : "Não",
       "Simples Nacional": r.simples_nacional === null ? "" : r.simples_nacional ? "Sim" : "Não",
       Status: r.status_cadastral || "",
       Tags: r.tags?.map((t) => t.name).join(", ") || "",
@@ -356,7 +357,7 @@ export default function Monitoramento() {
                   <th className="px-3 py-2.5 w-8"></th>
                   <th className="text-left px-4 py-2.5">CNPJ</th>
                   <th className="text-left px-4 py-2.5">Razão Social</th>
-                  <th className="text-left px-4 py-2.5">Simples</th>
+                  <th className="text-left px-4 py-2.5">MEI / Simples</th>
                   <th className="text-left px-4 py-2.5">Status</th>
                   <th className="text-left px-4 py-2.5">Tags</th>
                   <th className="text-left px-4 py-2.5">Frequência</th>
@@ -381,7 +382,12 @@ export default function Monitoramento() {
                     </td>
                     <td className="px-4 py-2.5 tabular-nums">{formatCNPJ(r.cnpj)}</td>
                     <td className="px-4 py-2.5 font-sans text-xs">{r.razao_social || "—"}</td>
-                    <td className="px-4 py-2.5"><SimplesBadge simples={r.simples_nacional} /></td>
+                    <td className="px-4 py-2.5">
+                      <div className="flex gap-1 items-center">
+                        <MeiBadge mei={r.regime_tributario === "MEI"} />
+                        <SimplesBadge simples={r.simples_nacional} />
+                      </div>
+                    </td>
                     <td className="px-4 py-2.5"><StatusBadge status={r.status_cadastral} /></td>
                     <td className="px-4 py-2.5">
                       <div className="flex flex-wrap gap-1">

@@ -23,6 +23,18 @@ export function StatusBadge({ status }: { status?: string | null }) {
   );
 }
 
+export function MeiBadge({ mei }: { mei?: boolean | null }) {
+  if (!mei) return null;
+  return (
+    <Badge variant="outline" className={cn(
+      "font-mono text-[10px] uppercase tracking-wider rounded-sm",
+      "text-amber-400 border-amber-400/30 bg-amber-400/10"
+    )}>
+      MEI
+    </Badge>
+  );
+}
+
 export function SimplesBadge({ simples }: { simples?: boolean | null }) {
   if (simples === null || simples === undefined)
     return <span className="font-mono text-[10px] text-muted-foreground">—</span>;

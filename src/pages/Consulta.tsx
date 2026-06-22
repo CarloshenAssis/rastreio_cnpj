@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Loader2, AlertCircle, CheckCircle2, FileSpreadsheet, Upload, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { parseCNPJList, formatCNPJ, stripCNPJ, validateCNPJ, formatDateTimeBR } from "@/lib/cnpj";
-import { StatusBadge, SimplesBadge } from "@/components/CNPJBadges";
+import { StatusBadge, SimplesBadge, MeiBadge } from "@/components/CNPJBadges";
 import { PDFReportButton } from "@/components/PDFReportButton";
 import { gerarRelatorioLote } from "@/lib/pdf";
 import { cn } from "@/lib/utils";
@@ -213,7 +213,7 @@ export default function Consulta() {
                   <tr>
                     <th className="text-left px-4 py-2.5">CNPJ</th>
                     <th className="text-left px-4 py-2.5">Razão Social</th>
-                    <th className="text-left px-4 py-2.5">Simples</th>
+                    <th className="text-left px-4 py-2.5">MEI / Simples</th>
                     <th className="text-left px-4 py-2.5">Status</th>
                     <th className="text-left px-4 py-2.5">UF</th>
                     <th className="text-left px-4 py-2.5">Consultado em</th>
@@ -233,7 +233,10 @@ export default function Consulta() {
                           ? <span className="text-destructive">{r.error}</span>
                           : (r.data?.razao_social || "—")}
                       </td>
-                      <td className="px-4 py-2.5"><SimplesBadge simples={r.data?.simples_nacional}/></td>
+                      <td className="px-4 py-2.5 flex gap-1 items-center">
+                        <MeiBadge mei={r.data?.regime_tributario === "MEI"} />
+                        <SimplesBadge simples={r.data?.simples_nacional}/>
+                      </td>
                       <td className="px-4 py-2.5"><StatusBadge status={r.data?.status_cadastral}/></td>
                       <td className="px-4 py-2.5 text-muted-foreground">{r.data?.uf || "—"}</td>
                       <td className="px-4 py-2.5 text-muted-foreground">{formatDateTimeBR(r.data?.last_checked_at)}</td>
